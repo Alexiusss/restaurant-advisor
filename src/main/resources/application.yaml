@@ -1,0 +1,13 @@
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/restaurant_advisor
+    username: postgres
+    password: 1234
+  freemarker:
+    expose-request-attributes: true
+    suffix: .ftl
