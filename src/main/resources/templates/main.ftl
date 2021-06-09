@@ -26,7 +26,7 @@
 
 <#list restaurants as restaurant>
     <div>
-        <b>${restaurant.id}</b>
+        <b>${restaurant.id()}</b>
         <span>${restaurant.name}</span>
         <span>${restaurant.cuisine}</span>
     </div>

@@ -1,7 +1,6 @@
 package com.example.restaurant_advisor.model;
 
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class Restaurant extends AbstractPersistable<Integer> {
+public class Restaurant extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
