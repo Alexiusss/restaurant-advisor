@@ -6,6 +6,11 @@
 </head>
 <body>
 <div>
+    <form action="/logout" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+<div>
     <form method="post">
         <input type="text" name="name" placeholder="Название ресторана">
         <input type="text" name="cuisine" placeholder="Тип кухни">
