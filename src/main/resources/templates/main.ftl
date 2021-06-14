@@ -34,6 +34,7 @@
         <b>${restaurant.id()}</b>
         <span>${restaurant.name}</span>
         <span>${restaurant.cuisine}</span>
+        <b>${restaurant.rating()}</b>
     </div>
 <#else>
     No restaurant

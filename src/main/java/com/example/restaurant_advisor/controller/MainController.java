@@ -34,7 +34,7 @@ public class MainController {
             restaurants = restaurantRepository.findByCuisineContains(cuisine);
         }
         else {
-            restaurants = restaurantRepository.findAll();
+            restaurants = restaurantRepository.getAllWithReviews();
         }
         model.addAttribute("restaurants", restaurants);
         model.addAttribute("filter", filter);
@@ -47,7 +47,7 @@ public class MainController {
         Restaurant restaurant = new Restaurant(name, cuisine);
 
         restaurantRepository.save(restaurant);
-        Iterable<Restaurant> restaurants = restaurantRepository.findAll();
+        Iterable<Restaurant> restaurants = restaurantRepository.getAllWithReviews();
 
         model.put("restaurants", restaurants);
         return "main";
