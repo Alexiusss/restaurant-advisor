@@ -4,6 +4,7 @@
 <div>
     <@l.logout/>
 </div>
+    <span><a href="/user">User list</a></span>
 <div>
     <form method="post">
         <input type="text" name="name" placeholder="Название ресторана">
