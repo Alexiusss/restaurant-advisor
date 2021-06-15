@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-<div>Hello , user</div>
-</body>
-</html>
+<#import "parts/common.ftl" as c>
+
+<@c.page>
+    <div>Hello, user</div>
+    <a href="/main">Main page</a>
+</@c.page>

@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Restaurant advisor</title>
-</head>
-<body>
+<#import "parts/common.ftl" as c>
+<#import "parts/login.ftl" as l>
+<@c.page>
 <div>
-    <form action="/logout" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
+    <@l.logout/>
 </div>
 <div>
     <form method="post">
         <input type="text" name="name" placeholder="Название ресторана">
         <input type="text" name="cuisine" placeholder="Тип кухни">
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
         <button type="submit">Добавить</button>
     </form>
 </div>
@@ -39,5 +34,4 @@
 <#else>
     No restaurant
 </#list>
-</body>
-</html>
+</@c.page>
