@@ -49,6 +49,8 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+<!--            https://github.com/projectlombok/lombok/issues/2790-->
+            <version>1.18.20</version>
         </dependency>
 
         <!--        Security-->
