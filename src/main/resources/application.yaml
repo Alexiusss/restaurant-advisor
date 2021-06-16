@@ -14,3 +14,4 @@ spring:
   freemarker:
     expose-request-attributes: true
     suffix: .ftl
+upload.path: /c:/workspace/project/restaurant_advisor/uploads/

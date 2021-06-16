@@ -23,6 +23,8 @@ public class Restaurant extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private Set<Review> reviews;
 
+    private String filename;
+
     public double rating() {
         if (reviews == null) return 0;
         return reviews.stream()
