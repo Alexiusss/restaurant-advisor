@@ -1,44 +1,78 @@
 <#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as l>
+<#include "parts/security.ftl">
+
 <@c.page>
-<div>
-    <@l.logout/>
-</div>
-    <span><a href="/user">User list</a></span>
-<div>
-    <form method="post" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Название ресторана">
-        <input type="text" name="cuisine" placeholder="Тип кухни">
-        <input type="file" name="file">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <button type="submit">Добавить</button>
-    </form>
-</div>
-<div>Список ресторанов</div>
-
-    <form method="get" action="/main">
-        <input type="text" name="filter" placeholder="Введите название ресторана" value="${filter!}">
-        <button type="submit">Найти</button>
-    </form>
-
-<form method="get" action="/main">
-    <input type="text" name="cuisine" placeholder="Введите название кухни" value="${cuisine!}">
-    <button type="submit">Найти</button>
-</form>
-
-<#list restaurants as restaurant>
-    <div>
-        <b>${restaurant.id()}</b>
-        <span>${restaurant.name}</span>
-        <span>${restaurant.cuisine}</span>
-        <b>${restaurant.rating()}</b>
-        <div>
-            <#if restaurant.filename??>
-                <img src="/img/${restaurant.filename}">
-            </#if>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <form method="get" action="/main" class="form-inline">
+                <input type="text" name="filter" class="form-control" placeholder="Search by restaurant name"
+                       value="${filter!}">
+                <button type="submit" class="btn btn-primary ml-2">Search</button>
+            </form>
         </div>
     </div>
-<#else>
-    No restaurant
-</#list>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <form method="get" action="/main" class="form-inline">
+                <input type="text" name="cuisine" class="form-control" placeholder="Search by cuisine"
+                       value="${cuisine!}">
+                <button type="submit" class="btn btn-primary ml-2">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <#if isAdmin>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+       aria-controls="collapseExample">
+        Add new restaurant
+    </a>
+    <div class="collapse" id="collapseExample">
+        <div class="form-group mt-3">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Restaurant name">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="cuisine" class="form-control" placeholder="Cuisine">
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" name="file" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                </div>
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </#if>
+
+    <div class="card-columns">
+        <#list restaurants as restaurant>
+            <div class="card my-3">
+                <div>
+                    <#if restaurant.filename??>
+                        <img src="/img/${restaurant.filename}" class="card-img-top">
+                    </#if>
+                </div>
+                <div class="m-2">
+                    <span>${restaurant.name}</span>
+                </div>
+
+                <div class="m-2">
+                    <span>${restaurant.rating()}</span>
+                </div>
+
+                <div class="m-2">
+                    <span>${restaurant.cuisine}</span>
+                </div>
+            </div>
+        <#else>
+            No restaurant
+        </#list>
+    </div>
 </@c.page>
