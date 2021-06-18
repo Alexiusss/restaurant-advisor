@@ -19,6 +19,8 @@ public class Restaurant extends BaseEntity {
     @Column(name = "cuisine", nullable = false)
     private String cuisine;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    private Contact contact;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private Set<Review> reviews;
