@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true, exclude = {"reviews"})
+@ToString(callSuper = true, exclude = {"contact", "reviews"})
 public class Restaurant extends BaseEntity {
 
     @Column(name = "name", nullable = false)

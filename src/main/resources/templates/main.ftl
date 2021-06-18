@@ -56,7 +56,8 @@
             <div class="card my-3">
                 <div>
                     <#if restaurant.filename??>
-                        <img src="/img/${restaurant.filename}" class="card-img-top">
+                        <img src="/img/${restaurant.filename}" class="card-img-top"
+                             onclick="window.location='/main/' + ${restaurant.getId()};">
                     </#if>
                 </div>
                 <div class="m-2">

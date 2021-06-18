@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,13 @@ public class MainController {
     @GetMapping
     public String greeting(Map<String, Object> model) {
         return "greeting";
+    }
+
+    @GetMapping("/main/{id}")
+    public String get(@PathVariable int id, Model model) {
+        Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
+        model.addAttribute("restaurant", restaurant);
+        return "restaurant";
     }
 
     @GetMapping("/main")
@@ -58,7 +66,7 @@ public class MainController {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
-            if(!uploadDir.exists()) {
+            if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
 
