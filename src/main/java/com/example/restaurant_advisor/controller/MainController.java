@@ -45,9 +45,9 @@ public class MainController {
         Iterable<Restaurant> restaurants;
 
         if (filter != null && !filter.isEmpty()) {
-            restaurants = restaurantRepository.findByName(filter);
+            restaurants = restaurantRepository.findByCuisineOrNameContains(filter);
         } else if (cuisine != null && !cuisine.isEmpty()) {
-            restaurants = restaurantRepository.findByCuisineContains(cuisine);
+            restaurants = restaurantRepository.findByCuisineOrNameContains(cuisine);
         } else {
             restaurants = restaurantRepository.getAllWithReviews();
         }

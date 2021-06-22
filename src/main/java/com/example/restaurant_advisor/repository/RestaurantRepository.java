@@ -12,14 +12,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    List<Restaurant> findByName(String name);
-
-    List<Restaurant> findByCuisineContains(String cuisine);
-
-    @Query("SELECT DISTINCT r FROM Restaurant r " +
-            "LEFT OUTER JOIN FETCH r.reviews v ")
-    List<Restaurant> getAllWithReviews();
-
     @Query("SELECT DISTINCT r FROM Restaurant r " +
             "LEFT OUTER JOIN FETCH r.reviews rr " +
             "LEFT OUTER JOIN FETCH r.contact c " +
