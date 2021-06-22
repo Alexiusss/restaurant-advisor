@@ -1,9 +1,13 @@
 package com.example.restaurant_advisor.controller;
 
+import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Restaurant;
+import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
+import com.example.restaurant_advisor.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,6 +27,8 @@ public class MainController {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -86,4 +93,15 @@ public class MainController {
         return "main";
     }
 
+    @PostMapping("/main/{id}")
+    public String addReview(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id,
+                            @RequestParam Integer rating, @RequestParam String title,
+                            @RequestParam String comment, Map<String, Object> model) {
+        final Restaurant restaurant = restaurantRepository.findById(id).orElseThrow();
+        Review review = new Review(rating, title, comment, LocalDate.now(), restaurant, authUser.getUser());
+        reviewRepository.save(review);
+        Restaurant updatedRestaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
+        model.put("restaurant", updatedRestaurant);
+        return "restaurant";
+    }
 }
