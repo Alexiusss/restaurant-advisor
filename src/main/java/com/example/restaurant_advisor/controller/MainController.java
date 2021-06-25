@@ -1,8 +1,10 @@
 package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
+import com.example.restaurant_advisor.model.Contact;
 import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.model.Review;
+import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class MainController {
     RestaurantRepository restaurantRepository;
     @Autowired
     ReviewRepository reviewRepository;
+    @Autowired
+    ContactRepository contactRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -65,10 +69,7 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String name,
-                      @RequestParam String cuisine, Map<String, Object> model,
-                      @RequestParam("file") MultipartFile file) throws IOException {
-        Restaurant restaurant = new Restaurant(name, cuisine);
+    public String add(Restaurant restaurant, @RequestParam("file") MultipartFile file, Contact contact, Map<String, Object> model) throws IOException {
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -86,22 +87,27 @@ public class MainController {
             restaurant.setFilename(resultFileName);
         }
 
+        restaurant.setContact(contact);
+        contact.setRestaurant(restaurant);
+
         restaurantRepository.save(restaurant);
+
         Iterable<Restaurant> restaurants = restaurantRepository.getAllWithReviews();
 
         model.put("restaurants", restaurants);
         return "main";
     }
 
-    @PostMapping("/main/{id}")
-    public String addReview(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id,
-                            @RequestParam Integer rating, @RequestParam String title,
-                            @RequestParam String comment, Map<String, Object> model) {
-        final Restaurant restaurant = restaurantRepository.findById(id).orElseThrow();
-        Review review = new Review(rating, title, comment, LocalDate.now(), restaurant, authUser.getUser());
+
+    @PostMapping(value = "/main/{id}")
+    // https://stackoverflow.com/a/58317766
+    public String addReview(@AuthenticationPrincipal AuthUser authUser, Review review, @PathVariable int id, Map<String, Object> model) {
+        review.setDate(LocalDate.now());
+        review.setUser(authUser.getUser());
+        review.setRestaurant(restaurantRepository.getOne(id));
         reviewRepository.save(review);
-        Restaurant updatedRestaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
-        model.put("restaurant", updatedRestaurant);
+        Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
+        model.put("restaurant", restaurant);
         return "restaurant";
     }
 }

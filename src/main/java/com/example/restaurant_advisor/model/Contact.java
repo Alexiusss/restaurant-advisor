@@ -10,8 +10,13 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString(callSuper = true)
-public class Contact extends BaseEntity {
+@ToString(callSuper = true, exclude = {"restaurant"})
+public class Contact {
+
+    // https://www.baeldung.com/jpa-one-to-one
+    @Id
+    @Column(name = "restaurant_id")
+    private Integer id;
 
     @Column(name = "adress", nullable = false)
     String adress;
@@ -26,8 +31,8 @@ public class Contact extends BaseEntity {
     String phone_number;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
     // https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
     @MapsId
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 }

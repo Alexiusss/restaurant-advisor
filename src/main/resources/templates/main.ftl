@@ -42,6 +42,18 @@
                         <label class="custom-file-label" for="customFile">Choose file</label>
                     </div>
                 </div>
+                <div class="form-group">
+                    <input type="text" name="adress" class="form-control" placeholder="Adress">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="website" class="form-control" placeholder="Website">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="email" class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="phone_number" class="form-control" placeholder="Phone number">
+                </div>
                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Create</button>

@@ -21,6 +21,7 @@ public class Restaurant extends BaseEntity {
 
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, optional = false)
+    @PrimaryKeyJoinColumn
     private Contact contact;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
