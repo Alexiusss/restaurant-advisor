@@ -64,20 +64,23 @@
                             <form method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="rating" class="col-form-label">Rating</label>
-                                    <input type="number" id="rating" name="rating" class="form-control" placeholder="From 1 to 5">
+                                    <input type="number" id="rating" name="rating" class="form-control"
+                                           placeholder="From 1 to 5">
                                 </div>
                                 <div class="form-group">
                                     <label for="rating" class="col-form-label">Title</label>
-                                    <input type="text" id="title" name="title" class="form-control" placeholder="Short title for your review">
+                                    <input type="text" id="title" name="title" class="form-control"
+                                           placeholder="Short title for your review">
                                 </div>
                                 <div class="form-group">
                                     <label for="comment" class="col-form-label">Comment</label>
-                                    <input type="text" if="comment" name="comment" class="form-control" placeholder="Comment">
+                                    <input type="text" if="comment" name="comment" class="form-control"
+                                           placeholder="Comment">
                                 </div>
                                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save review</button>
+                                    <button type="submit" class="btn btn-primary">Save review</button>
                                 </div>
                             </form>
                         </div>
