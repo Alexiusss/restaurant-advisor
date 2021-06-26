@@ -1,4 +1,4 @@
-  # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
 spring:
   jpa:
@@ -15,6 +15,17 @@ spring:
   freemarker:
     expose-request-attributes: true
     suffix: .ftl
+
+
+  mail:
+    host: smtp.yandex.ru
+    username: maicl.svetlov@yandex.ru
+    password: unevqrlqmgafiymw
+    port: 465
+    protocol: smtps
+    properties:
+      mail:
+        debug: true
 
 upload.path: /c:/workspace/project/restaurant_advisor/uploads/
 server.servlet:

@@ -31,8 +31,10 @@ public class User extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "active", nullable = false, columnDefinition = "bool default true")
+    @Column(name = "active", nullable = false, columnDefinition = "bool default false")
     private boolean active;
+
+    private String activationCode;
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
