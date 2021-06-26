@@ -1,12 +1,15 @@
 package com.example.restaurant_advisor.controller;
 
+import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -16,18 +19,19 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
     @Autowired
     UserRepository userRepository;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "userList";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
@@ -35,7 +39,7 @@ public class UserController {
 
         return "userEdit";
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String userSave(
             @RequestParam String firstname,
@@ -63,5 +67,33 @@ public class UserController {
         userRepository.save(user);
 
         return "redirect:/user";
+    }
+
+    @GetMapping("profile")
+    public String getProfile(Model model, @AuthenticationPrincipal AuthUser authUser) {
+        model.addAttribute("email", authUser.getUser().getEmail());
+        model.addAttribute("firstName", authUser.getUser().getFirstName());
+        model.addAttribute("lastName", authUser.getUser().getLastName());
+        return "profile";
+    }
+
+    @PostMapping("profile")
+    public String updateProfile(
+            @AuthenticationPrincipal AuthUser authUser,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String password
+    ) {
+        User user = authUser.getUser();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        if (!ObjectUtils.isEmpty(password)) {
+            user.setPassword(password);
+        }
+
+        userRepository.save(user);
+
+        return "redirect:/user/profile";
     }
 }

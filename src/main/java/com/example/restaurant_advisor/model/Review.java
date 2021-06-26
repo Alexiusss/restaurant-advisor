@@ -20,7 +20,7 @@ public class Review extends BaseEntity{
     @Column(name = "title")
     private String title;
 
-    @Column(name = "comment", length = 2000)
+    @Column(name = "comment", length = 2048)
     private String comment;
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
