@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -92,7 +94,7 @@ public class UserController {
             user.setPassword(password);
         }
 
-        userRepository.save(user);
+        userRepository.save(prepareToSave(user));
 
         return "redirect:/user/profile";
     }

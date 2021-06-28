@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -34,7 +36,7 @@ public class UserService implements UserDetailsService {
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
 
-        userRepository.save(user);
+        userRepository.save(prepareToSave(user));
 
         if (!ObjectUtils.isEmpty(user.getEmail())) {
             String message = String.format(
