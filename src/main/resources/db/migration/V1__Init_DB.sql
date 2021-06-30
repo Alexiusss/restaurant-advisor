@@ -2,7 +2,7 @@ create sequence hibernate_sequence start 1 increment 1;
 
 create table contacts (
                           restaurant_id int4 not null,
-                          adress varchar(255) not null,
+                          address varchar(255) not null,
                           email varchar(255),
                           phone_number varchar(255) not null,
                           website varchar(255),
@@ -46,7 +46,7 @@ create table users (
 );
 
 alter table if exists contacts
-    add constraint contacts_unique_idx unique (adress, phone_number);
+    add constraint contacts_unique_idx unique (address, phone_number);
 
 alter table if exists reviews
     add constraint reviews_unique_user_date_idx unique (user_id, date);

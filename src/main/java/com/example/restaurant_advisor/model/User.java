@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -20,16 +22,25 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email(message = "Email is not correct")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
 
     @Column(name = "firstName")
+    @NotBlank(message = "First name cannot be empty")
     private String firstName;
 
     @Column(name = "lastName")
+    @NotBlank(message = "Last name cannot be empty")
     private String lastName;
 
     @Column(name = "password", nullable = false)
+    @NotBlank(message = "Password cannot be empty")
     private String password;
+
+    @Transient
+    @NotBlank(message = "Password2 cannot be empty")
+    private String password2;
 
     @Column(name = "active", nullable = false, columnDefinition = "bool default false")
     private boolean active;
@@ -63,4 +74,11 @@ public class User extends BaseEntity {
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
+
+    // https://github.com/spring-projects/spring-data-rest/issues/1368
+    @PostLoad
+    private void postLoadPassword2(){
+        this.password2 = this.password;
+    }
+
 }

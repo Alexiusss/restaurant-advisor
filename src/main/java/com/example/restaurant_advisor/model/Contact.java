@@ -3,9 +3,12 @@ package com.example.restaurant_advisor.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "contacts", uniqueConstraints = {@UniqueConstraint(columnNames = {"adress", "phone_number"}, name = "contacts_unique_idx")})
+@Table(name = "contacts", uniqueConstraints = {@UniqueConstraint(columnNames = {"address", "phone_number"}, name = "contacts_unique_idx")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,16 +21,21 @@ public class Contact {
     @Column(name = "restaurant_id")
     private Integer id;
 
-    @Column(name = "adress", nullable = false)
-    String adress;
+    @Column(name = "address", nullable = false)
+    @NotBlank(message = "Please fill the address")
+    @Size(max = 128)
+    String address;
 
     @Column(name = "website")
+    @Size(max = 128)
     String website;
 
     @Column(name = "email")
+    @Email(message = "Email is not correct")
     String email;
 
     @Column(name = "phone_number", nullable = false)
+    @NotBlank(message = "Please fill the phone number")
     String phone_number;
 
     @OneToOne(fetch = FetchType.LAZY)

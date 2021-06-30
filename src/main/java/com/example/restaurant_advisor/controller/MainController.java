@@ -12,17 +12,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 
 @Controller
 public class MainController {
@@ -69,45 +73,73 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(Restaurant restaurant, @RequestParam("file") MultipartFile file, Contact contact, Map<String, Object> model) throws IOException {
-
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-
-            String resultFileName = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFileName));
-
-            restaurant.setFilename(resultFileName);
-        }
+    public String add(@Valid Restaurant restaurant, BindingResult bindingResult,
+                      @Valid Contact contact, BindingResult bindingResult2,
+                      Model model, @RequestParam("file") MultipartFile file) throws IOException {
 
         restaurant.setContact(contact);
         contact.setRestaurant(restaurant);
 
-        restaurantRepository.save(restaurant);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorsMap = getErrors(bindingResult);
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("restaurant", restaurant);
+        }
+
+        if (bindingResult2.hasErrors()) {
+            Map<String, String> errorsMap = getErrors(bindingResult2);
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("contact", contact);
+        } else {
+
+            if (file != null && !file.getOriginalFilename().isEmpty()) {
+                File uploadDir = new File(uploadPath);
+
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
+
+                String uuidFile = UUID.randomUUID().toString();
+
+                String resultFileName = uuidFile + "." + file.getOriginalFilename();
+
+                file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+                restaurant.setFilename(resultFileName);
+            }
+
+            model.addAttribute("restaurant", null);
+
+            restaurantRepository.save(restaurant);
+        }
 
         Iterable<Restaurant> restaurants = restaurantRepository.getAllWithReviews();
 
-        model.put("restaurants", restaurants);
+        model.addAttribute("restaurants", restaurants);
         return "main";
     }
 
-
     @PostMapping(value = "/main/{id}")
     // https://stackoverflow.com/a/58317766
-    public String addReview(@AuthenticationPrincipal AuthUser authUser, Review review, @PathVariable int id, Map<String, Object> model) {
-        review.setDate(LocalDate.now());
-        review.setUser(authUser.getUser());
-        review.setRestaurant(restaurantRepository.getOne(id));
-        reviewRepository.save(review);
+    public String addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
+                            BindingResult bindingResult, Model model,
+                            @PathVariable int id) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorsMap = getErrors(bindingResult);
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("review", review);
+        } else {
+            review.setDate(LocalDate.now());
+            review.setUser(authUser.getUser());
+            review.setRestaurant(restaurantRepository.getOne(id));
+            reviewRepository.save(review);
+        }
+
+        model.addAttribute("review", null);
+
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
-        model.put("restaurant", restaurant);
+        model.addAttribute("restaurant", restaurant);
         return "restaurant";
     }
 }

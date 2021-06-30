@@ -18,7 +18,7 @@
             <div class="card-body">
                 <h5 class="card-title">Location and contact details</h5>
                 <#if restaurant.contact??>
-                    <p class="card-text">${restaurant.contact.getAdress()}</p>
+                    <p class="card-text">${restaurant.contact.getAddress()}</p>
                     <p class="card-text">${restaurant.contact.getPhone_number()}</p>
                     <#if restaurant.contact.getWebsite()??>
                         <p class="card-text">${restaurant.contact.getWebsite()}</p>
@@ -37,13 +37,12 @@
         Centered element
     </div>
 
-
     <div class="list-group" style="width: 34rem">
 
         <a class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">Reviews </h5>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" >
                     Write a review
                 </button>
             </div>
@@ -64,18 +63,39 @@
                             <form method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="rating" class="col-form-label">Rating</label>
-                                    <input type="number" id="rating" name="rating" class="form-control"
+                                    <input type="number" class="form-control ${(ratingError??)?string('is-invalid', '')}"
+                                           value="<#if review??>${review.rating}</#if>"
+                                           id="rating" name="rating"
                                            placeholder="From 1 to 5">
+                                    <#if ratingError??>
+                                        <div class="invalid-feedback">
+                                            ${ratingError}
+                                        </div>
+                                    </#if>
                                 </div>
                                 <div class="form-group">
-                                    <label for="rating" class="col-form-label">Title</label>
-                                    <input type="text" id="title" name="title" class="form-control"
-                                           placeholder="Short title for your review">
+                                    <label for="title" class="col-form-label">Title</label>
+                                    <input type="text" class="form-control ${(titleError??)?string('is-invalid', '')}"
+                                           value="<#if review??>${review.title}</#if>"
+                                           id="title" name="title"
+                                           placeholder="Short title for your review"/>
+                                    <#if titleError??>
+                                        <div class="invalid-feedback">
+                                            ${titleError}
+                                        </div>
+                                    </#if>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment" class="col-form-label">Comment</label>
-                                    <input type="text" if="comment" name="comment" class="form-control"
+                                    <input type="text" class="form-control ${(commentError??)?string('is-invalid', '')}"
+                                           value="<#if review??>${review.comment}</#if>"
+                                           id="comment" name="comment"
                                            placeholder="Comment">
+                                    <#if commentError??>
+                                        <div class="invalid-feedback">
+                                            ${commentError}
+                                        </div>
+                                    </#if>
                                 </div>
                                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                                 <div class="modal-footer">

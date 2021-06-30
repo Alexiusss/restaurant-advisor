@@ -1,8 +1,10 @@
 package com.example.restaurant_advisor.model;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -14,9 +16,13 @@ import java.util.Set;
 public class Restaurant extends BaseEntity {
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "Please fill the name")
+    @Length(max = 128, message = "Message too long (more than 128)")
     private String name;
 
     @Column(name = "cuisine", nullable = false)
+    @NotBlank(message = "Please fill the cuisine")
+    @Length(max = 255, message = "Message too long (more than 255)")
     private String cuisine;
 
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL,
