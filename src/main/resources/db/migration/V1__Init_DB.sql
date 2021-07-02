@@ -49,7 +49,7 @@ alter table if exists contacts
     add constraint contacts_unique_idx unique (address, phone_number);
 
 alter table if exists reviews
-    add constraint reviews_unique_user_date_idx unique (user_id, date);
+    add constraint reviews_unique_user_restaurant_idx unique (user_id, restaurant_id);
 
 alter table if exists user_role
     add constraint user_roles_unique unique (user_id, role);
