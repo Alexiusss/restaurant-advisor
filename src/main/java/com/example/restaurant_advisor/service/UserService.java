@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
         if (!ObjectUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Restaurant Advisor. Please visit next link: localhost:8080/activate/%s",
+                            "Welcome to Restaurant Advisor. Please visit next link: <a href='http://localhost:8080/activate/%s'>link</a>",
                     user.getFirstName(),
                     user.getActivationCode()
             );
