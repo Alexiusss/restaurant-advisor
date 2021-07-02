@@ -33,6 +33,10 @@ spring:
     properties:
       mail:
         debug: true
+  session:
+    jdbc:
+      initialize-schema: always
+      table-name: SPRING_SESSION
 
 upload.path: /c:/workspace/project/restaurant_advisor/uploads/
 recaptcha.secret: 6Ldosm0bAAAAAJCXZgVkciv2zai6rT1hEMybmJo_
