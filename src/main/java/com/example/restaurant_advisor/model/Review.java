@@ -36,7 +36,7 @@ public class Review extends BaseEntity{
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 

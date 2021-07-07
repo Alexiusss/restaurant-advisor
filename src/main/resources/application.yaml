@@ -7,10 +7,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-#      javax:
-#        persistance:
-#          validation:
-#            mode: none
     open-in-view: false
     hibernate:
       ddl-auto: validate
