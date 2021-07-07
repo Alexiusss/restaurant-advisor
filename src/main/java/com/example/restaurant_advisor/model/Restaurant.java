@@ -1,6 +1,8 @@
 package com.example.restaurant_advisor.model;
 
 import lombok.*;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -25,12 +27,16 @@ public class Restaurant extends BaseEntity {
     @Length(max = 255, message = "Message too long (more than 255)")
     private String cuisine;
 
-    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+    // https://stackoverflow.com/a/54730020
+    @OneToOne(mappedBy = "restaurant", cascade={CascadeType.PERSIST,CascadeType.REMOVE},
+            fetch = FetchType.LAZY)
+    // https://vladmihalcea.com/hibernate-lazytoone-annotation/
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     @PrimaryKeyJoinColumn
     private Contact contact;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant",
+            cascade = CascadeType.ALL)
     private Set<Review> reviews;
 
     private String filename;

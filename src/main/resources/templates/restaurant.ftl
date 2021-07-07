@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="card text-right" style="height: 15rem">
+        <div class="card text-right" style="height: <#if isAdmin> 17rem <#else> 15rem></#if>">
             <div class="card-body">
                 <h5 class="card-title">Location and contact details</h5>
                 <#if restaurant.contact??>
@@ -26,12 +26,29 @@
                     <#if restaurant.contact.getEmail()??>
                         <p class="card-text">${restaurant.contact.getEmail()}</p>
                     </#if>
+                    <#if isAdmin>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+                           aria-expanded="false"
+                           aria-controls="collapseExample">
+                            Edit contact
+                        </a>
+                    </#if>
                 <#else>
                     <p class="card-text"><small class="text-muted">No data</small></p>
+
+                    <#if isAdmin>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+                           aria-expanded="false"
+                           aria-controls="collapseExample">
+                            Add contact
+                        </a>
+                    </#if>
                 </#if>
             </div>
         </div>
     </div>
+
+    <#include "parts/contactEdit.ftl"/>
 
     <div class="mx-auto" style="width: 200px;">
         Centered element
@@ -42,7 +59,7 @@
         <a class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">Reviews </h5>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" >
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                     Write a review
                 </button>
             </div>
@@ -63,7 +80,8 @@
                             <form method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="rating" class="col-form-label">Rating</label>
-                                    <input type="number" class="form-control ${(ratingError??)?string('is-invalid', '')}"
+                                    <input type="number"
+                                           class="form-control ${(ratingError??)?string('is-invalid', '')}"
                                            value="<#if review??>${review.rating}</#if>"
                                            id="rating" name="rating"
                                            placeholder="From 1 to 5">

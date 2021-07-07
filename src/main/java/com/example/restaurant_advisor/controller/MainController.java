@@ -1,7 +1,6 @@
 package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
-import com.example.restaurant_advisor.model.Contact;
 import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.repository.ContactRepository;
@@ -9,6 +8,7 @@ import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,7 +64,7 @@ public class MainController {
         } else if (cuisine != null && !cuisine.isEmpty()) {
             restaurants = restaurantRepository.findByCuisineOrNameContains(cuisine);
         } else {
-            restaurants = restaurantRepository.getAllWithReviews();
+            restaurants = restaurantRepository.getAllWithReviewsAndContact();
         }
         model.addAttribute("restaurants", restaurants);
         model.addAttribute("filter", filter);
@@ -72,13 +72,10 @@ public class MainController {
         return "main";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/main")
     public String add(@Valid Restaurant restaurant, BindingResult bindingResult,
-                      @Valid Contact contact, BindingResult bindingResult2,
                       Model model, @RequestParam("file") MultipartFile file) throws IOException {
-
-        restaurant.setContact(contact);
-        contact.setRestaurant(restaurant);
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = getErrors(bindingResult);
@@ -86,11 +83,7 @@ public class MainController {
             model.addAttribute("restaurant", restaurant);
         }
 
-        if (bindingResult2.hasErrors()) {
-            Map<String, String> errorsMap = getErrors(bindingResult2);
-            model.mergeAttributes(errorsMap);
-            model.addAttribute("contact", contact);
-        } else {
+        else {
 
             if (file != null && !file.getOriginalFilename().isEmpty()) {
                 File uploadDir = new File(uploadPath);
@@ -113,7 +106,7 @@ public class MainController {
             restaurantRepository.save(restaurant);
         }
 
-        Iterable<Restaurant> restaurants = restaurantRepository.getAllWithReviews();
+        Iterable<Restaurant> restaurants = restaurantRepository.getAllWithReviewsAndContact();
 
         model.addAttribute("restaurants", restaurants);
         return "main";

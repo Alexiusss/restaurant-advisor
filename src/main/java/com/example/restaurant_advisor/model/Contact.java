@@ -38,9 +38,10 @@ public class Contact {
     @NotBlank(message = "Please fill the phone number")
     String phone_number;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    // https://stackoverflow.com/a/54405532
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     // https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
     @MapsId
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
     private Restaurant restaurant;
 }

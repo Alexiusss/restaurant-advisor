@@ -18,9 +18,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
             "r.name LIKE ?1%")
     List<Restaurant> findByCuisineOrNameContains(String filter);
 
-    @EntityGraph(attributePaths = {"reviews"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"reviews", "contact"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r")
-    List<Restaurant> getAllWithReviews();
+    List<Restaurant> getAllWithReviewsAndContact();
 
     @EntityGraph(attributePaths = {"reviews", "contact"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=?1")
