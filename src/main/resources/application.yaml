@@ -7,6 +7,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        #  https://stackoverflow.com/a/48129503
+        jdbc.batch_size: 20
     open-in-view: false
     hibernate:
       ddl-auto: validate
@@ -17,6 +19,8 @@ spring:
   freemarker:
     expose-request-attributes: true
     suffix: .ftl
+    #https://stackoverflow.com/a/24811052
+    expose-spring-macro-helpers: true
     #  https://stackoverflow.com/questions/53172123/flyway-found-non-empty-schemas-public-without-schema-history-table-use-bas
   flyway:
     baseline-on-migrate: true

@@ -50,6 +50,7 @@ public class MainController {
     public String get(@PathVariable int id, Model model) {
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
         model.addAttribute("restaurant", restaurant);
+        model.addAttribute("reviews", restaurant.getReviews());
         return "restaurant";
     }
 
@@ -81,9 +82,7 @@ public class MainController {
             Map<String, String> errorsMap = getErrors(bindingResult);
             model.mergeAttributes(errorsMap);
             model.addAttribute("restaurant", restaurant);
-        }
-
-        else {
+        } else {
 
             if (file != null && !file.getOriginalFilename().isEmpty()) {
                 File uploadDir = new File(uploadPath);
@@ -132,6 +131,7 @@ public class MainController {
 
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
         model.addAttribute("restaurant", restaurant);
+        model.addAttribute("reviews", restaurant.getReviews());
         return "restaurant";
     }
 }

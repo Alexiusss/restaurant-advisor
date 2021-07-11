@@ -10,7 +10,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,9 +57,9 @@ public class User extends BaseEntity {
     @OrderBy("date DESC")
     //https://stackoverflow.com/a/44988100/548473
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
-    public User(Integer id, String email, String firstName, String lastName, String password, boolean active, Set<Role> roles, List<Review> reviews) {
+    public User(Integer id, String email, String firstName, String lastName, String password, boolean active, Set<Role> roles, Set<Review> reviews) {
         super(id);
         this.email = email;
         this.firstName = firstName;
