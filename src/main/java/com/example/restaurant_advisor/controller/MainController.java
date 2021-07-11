@@ -126,10 +126,9 @@ public class MainController {
             review.setDate(LocalDate.now());
             review.setUser(authUser.getUser());
             review.setRestaurant(restaurantRepository.getOne(id));
+            model.addAttribute("review", null);
             reviewRepository.save(review);
         }
-
-        model.addAttribute("review", null);
 
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
         model.addAttribute("restaurant", restaurant);
