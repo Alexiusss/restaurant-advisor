@@ -10,7 +10,9 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post"
+                          <#if !reviewEdit?? && restaurant??>action="/main/${restaurant.getId()}/review"</#if>
+                          enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="rating" class="col-form-label">Rating</label>
                             <input type="number"

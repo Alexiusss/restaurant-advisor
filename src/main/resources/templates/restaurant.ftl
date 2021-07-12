@@ -77,7 +77,7 @@
             </div>
         </a>
 
-<#--        <#include "parts/reviewEdit.ftl"/>-->
+        <#include "parts/reviewEdit.ftl"/>
 
         <#include "parts/reviewList.ftl" />
 
