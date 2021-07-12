@@ -1,4 +1,4 @@
-<div class="collapse<#if contact??>show</#if>" id="collapseExample">
+<div class="collapse<#if contact??>show</#if>" id="collapseContact">
     <div class="form-group mt-3">
         <form method="post" action="/main/${restaurant.getId()}/contact" enctype="multipart/form-data">
             <div class="form-group">

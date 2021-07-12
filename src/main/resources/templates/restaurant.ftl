@@ -3,6 +3,7 @@
 
 <@c.page>
     <div class="card-deck">
+
         <div class="card" style="width: 33rem;">
             <#if restaurant.filename??>
                 <img class="card-img-top" src="/img/${restaurant.filename}" alt="Card image cap">
@@ -11,6 +12,15 @@
                 <h5 class="card-title">${restaurant.getName()}</h5>
                 <div>${restaurant.rating()} </div>
                 <p class="card-text">${restaurant.getCuisine()}</p>
+            </div>
+
+            <div class="text-right" >
+            <#if isAdmin>
+                <a class="btn btn-outline-primary" data-toggle="collapse" href="#collapseRestaurant" role="button" aria-expanded="false"
+                   aria-controls="collapseRestaurant">
+                    Edit
+                </a>
+            </#if>
             </div>
         </div>
 
@@ -27,9 +37,9 @@
                         <p class="card-text">${restaurant.contact.getEmail()}</p>
                     </#if>
                     <#if isAdmin>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+                        <a class="btn btn-outline-primary" data-toggle="collapse" href="#collapseContact" role="button"
                            aria-expanded="false"
-                           aria-controls="collapseExample">
+                           aria-controls="collapseContact">
                             Edit contact
                         </a>
                     </#if>
@@ -37,7 +47,7 @@
                     <p class="card-text"><small class="text-muted">No data</small></p>
 
                     <#if isAdmin>
-                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseContact" role="button"
                            aria-expanded="false"
                            aria-controls="collapseExample">
                             Add contact
@@ -47,9 +57,11 @@
             </div>
         </div>
     </div>
+<#if isAdmin>
+    <#include "parts/restaurantEdit.ftl"/>
 
     <#include "parts/contactEdit.ftl"/>
-
+</#if>
     <div class="mx-auto" style="width: 200px;">
         Centered element
     </div>
@@ -65,7 +77,7 @@
             </div>
         </a>
 
-        <#include "parts/reviewEdit.ftl"/>
+<#--        <#include "parts/reviewEdit.ftl"/>-->
 
         <#include "parts/reviewList.ftl" />
 

@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ import java.util.UUID;
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 
 @Controller
-public class MainController {
+public class RestaurantController {
 
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -84,21 +85,7 @@ public class MainController {
             model.addAttribute("restaurant", restaurant);
         } else {
 
-            if (file != null && !file.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(uploadPath);
-
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-
-                String uuidFile = UUID.randomUUID().toString();
-
-                String resultFileName = uuidFile + "." + file.getOriginalFilename();
-
-                file.transferTo(new File(uploadPath + "/" + resultFileName));
-
-                restaurant.setFilename(resultFileName);
-            }
+            saveFile(restaurant, file);
 
             model.addAttribute("restaurant", null);
 
@@ -109,6 +96,48 @@ public class MainController {
 
         model.addAttribute("restaurants", restaurants);
         return "main";
+    }
+
+    private void saveFile(Restaurant restaurant, MultipartFile file) throws IOException {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+
+            String resultFileName = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+            restaurant.setFilename(resultFileName);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/main/{id}")
+    public String updateRestaurant(@PathVariable int id,
+                                   @RequestParam("name") String name,
+                                   @RequestParam("cuisine") String cuisine,
+                                   @RequestParam("file") MultipartFile file) throws IOException {
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow();
+        if (!ObjectUtils.isEmpty(name)) {
+            restaurant.setName(name);
+        }
+
+        if (!ObjectUtils.isEmpty(cuisine)) {
+            restaurant.setCuisine(cuisine);
+        }
+
+        if (!ObjectUtils.isEmpty(file)) {
+            saveFile(restaurant, file);
+        }
+
+        restaurantRepository.save(restaurant);
+
+        return "redirect:/main/" + id;
     }
 
     @PostMapping(value = "/main/{id}")
