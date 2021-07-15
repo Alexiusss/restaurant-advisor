@@ -7,6 +7,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 20
         #  https://stackoverflow.com/a/48129503
         jdbc.batch_size: 20
     open-in-view: false

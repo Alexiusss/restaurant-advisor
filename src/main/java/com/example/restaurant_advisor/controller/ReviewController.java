@@ -6,6 +6,7 @@ import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
+import com.example.restaurant_advisor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,15 +33,21 @@ public class ReviewController {
     ReviewRepository reviewRepository;
     @Autowired
     RestaurantRepository restaurantRepository;
+    @Autowired
+    UserRepository userRepository;
 
-    @GetMapping(value = "/user-reviews/{user}")
+    @GetMapping(value = "/user-reviews/{userId}")
     public String userReviews(@AuthenticationPrincipal AuthUser currentUser,
-                              @PathVariable User user, Model model) {
+                              @PathVariable int userId, Model model) {
 
-        List<Review> reviews = reviewRepository.getAllByUserId(user.id());
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
 
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("isCurrentUser", currentUser.equals(user));
+        model.addAttribute("userChannel", user);
+        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
+        model.addAttribute("subscribersCount", user.getSubscribers().size());
+        model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser.getUser()));
+        model.addAttribute("reviews", user.getReviews());
+        model.addAttribute("isCurrentUser", currentUser.getUser().equals(user));
 
         return "userReviews";
     }

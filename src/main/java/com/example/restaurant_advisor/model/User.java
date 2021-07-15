@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true, exclude = {"password", "reviews"})
+@ToString(callSuper = true, exclude = {"password", "reviews", "subscribers", "subscriptions"})
 public class User extends BaseEntity {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -50,7 +51,9 @@ public class User extends BaseEntity {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique")})
     @Column(name = "role")
+    @JoinColumn(name = "user_id")
     @ElementCollection(fetch = FetchType.EAGER)
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -58,6 +61,22 @@ public class User extends BaseEntity {
     //https://stackoverflow.com/a/44988100/548473
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Review> reviews;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_subscriptions",
+            joinColumns = { @JoinColumn(name = "channel_id") },
+            inverseJoinColumns = { @JoinColumn(name = "subscriber_id") }
+    )
+    private Set<User> subscribers = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_subscriptions",
+            joinColumns = { @JoinColumn(name = "subscriber_id") },
+            inverseJoinColumns = { @JoinColumn(name = "channel_id") }
+    )
+    private Set<User> subscriptions = new HashSet<>();
 
     public User(Integer id, String email, String firstName, String lastName, String password, boolean active, Set<Role> roles, Set<Review> reviews) {
         super(id);

@@ -4,6 +4,7 @@ import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
+import com.example.restaurant_advisor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,8 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
@@ -41,6 +44,7 @@ public class UserController {
 
         return "userEdit";
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String userSave(
@@ -97,5 +101,42 @@ public class UserController {
         userRepository.save(prepareToSave(user));
 
         return "redirect:/user/profile";
+    }
+
+    @GetMapping("subscribe/{userId}")
+    public String subscribe(@AuthenticationPrincipal AuthUser currentUser,
+                            @PathVariable int userId) {
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        userService.subscribe(currentUser, user);
+
+        return "redirect:/user-reviews/" + user.getId();
+    }
+
+    @GetMapping("unsubscribe/{userId}")
+    public String unsubscribe(@AuthenticationPrincipal AuthUser currentUser,
+                              @PathVariable int userId) {
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        userService.unsubscribe(currentUser, user);
+
+        return "redirect:/user-reviews/" + user.getId();
+    }
+
+    @GetMapping("{type}/{userId}/list")
+    public String userList(
+            Model model,
+            @PathVariable int userId,
+            @PathVariable String type
+    ) {
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        model.addAttribute("userChannel", user);
+        model.addAttribute("type", type);
+
+        if ("subscriptions".equals(type)) {
+            model.addAttribute("users", user.getSubscriptions());
+        } else {
+            model.addAttribute("users", user.getSubscribers());
+        }
+
+        return "subscriptions";
     }
 }
