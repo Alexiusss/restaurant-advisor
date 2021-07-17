@@ -78,14 +78,14 @@ public class User extends BaseEntity {
     )
     private Set<User> subscriptions = new HashSet<>();
 
-    public User(Integer id, String email, String firstName, String lastName, String password, boolean active, Set<Role> roles, Set<Review> reviews) {
+    public User(Integer id, String email, String firstName, String lastName, String password, boolean active, String activationCode, Collection<Role> roles) {
         super(id);
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.active = active;
-        this.reviews = reviews;
+        this.activationCode = activationCode;
         setRoles(roles);
     }
 

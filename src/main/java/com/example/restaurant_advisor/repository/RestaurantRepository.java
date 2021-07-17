@@ -14,6 +14,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     @Query("SELECT DISTINCT r FROM Restaurant r " +
             "LEFT OUTER JOIN FETCH r.reviews rr " +
+            "LEFT OUTER JOIN FETCH r.contact c " +
             "WHERE r.cuisine LIKE ?1% OR " +
             "r.name LIKE ?1%")
     List<Restaurant> findByCuisineOrNameContains(String filter);
