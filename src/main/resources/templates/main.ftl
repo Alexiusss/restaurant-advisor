@@ -6,7 +6,7 @@
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
                 <input type="text" name="filter" class="form-control" placeholder="Search by restaurant name"
-                       value="${filter!}" />
+                       value="${filter!}"/>
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
             </form>
         </div>
@@ -16,7 +16,7 @@
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
                 <input type="text" name="cuisine" class="form-control" placeholder="Search by cuisine"
-                       value="${cuisine!}" />
+                       value="${cuisine!}"/>
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
             </form>
         </div>
@@ -36,15 +36,21 @@
                 <div>
                     <#if restaurant.filename??>
                         <img src="/img/${restaurant.filename}" class="card-img-top"
-                             onclick="window.location='/main/' + ${restaurant.getId()};" />
+                             onclick="window.location='/main/' + ${restaurant.getId()};"/>
                     </#if>
                 </div>
                 <div class="m-2">
                     <span>${restaurant.name}</span>
                 </div>
-                <div class="m-2">
-                    <span>${restaurant.rating()}</span>
-                </div>
+                <#--                https://stackoverflow.com/questions/45523742/how-can-i-use-rate-yo-jquery-star-rating-plugin-with-data-attribute-->
+                <#if (restaurant.rating() > 0)??>
+                    <div>
+                        <div class="rateyo"
+                             data-rateyo-rating="${restaurant.rating()}"
+                             data-rateyo-num-stars="5"
+                             data-rateyo-read-only="true"></div>
+                    </div>
+                </#if>
                 <div class="m-2">
                     <i>${restaurant.cuisine}</i>
                 </div>
@@ -53,4 +59,8 @@
             No restaurant
         </#list>
     </div>
+
 </@c.page>
+<script>
+    $(".rateyo").rateYo();
+</script>
