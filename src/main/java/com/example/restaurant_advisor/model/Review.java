@@ -36,6 +36,11 @@ public class Review extends BaseEntity{
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     private LocalDate date;
 
+    @Column(name = "active", nullable = false, columnDefinition = "bool default false")
+    private boolean active;
+
+    private String filename;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;

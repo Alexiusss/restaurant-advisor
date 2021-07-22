@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
+import static com.example.restaurant_advisor.util.ControllerUtils.saveFile;
 
 @Controller
 public class RestaurantController {
@@ -81,7 +80,7 @@ public class RestaurantController {
             model.addAttribute("restaurant", restaurant);
         } else {
 
-            saveFile(restaurant, file);
+            restaurant.setFilename(saveFile(file, uploadPath));
 
             model.addAttribute("restaurant", null);
 
@@ -92,24 +91,6 @@ public class RestaurantController {
 
         model.addAttribute("restaurants", restaurants);
         return "main";
-    }
-
-    private void saveFile(Restaurant restaurant, MultipartFile file) throws IOException {
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-
-            String resultFileName = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFileName));
-
-            restaurant.setFilename(resultFileName);
-        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -128,7 +109,7 @@ public class RestaurantController {
         }
 
         if (!ObjectUtils.isEmpty(file)) {
-            saveFile(restaurant, file);
+            restaurant.setFilename(saveFile(file, uploadPath));
         }
 
         restaurantRepository.save(restaurant);

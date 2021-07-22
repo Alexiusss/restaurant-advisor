@@ -1,12 +1,18 @@
 <#include "security.ftl">
 <#list reviews as review>
     <ul class="list-group">
-        <li class="list-group-item list-group-item">
-            <div class="d-flex w-100 justify-content-between">
+        <li class="list-group-item <#if !review.isActive()>list-group-item-light</#if>">
+
+             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">${review.getTitle()}</h5>
                 <small class="text-muted">${review.getDate().year}</small>
             </div>
             <p class="mb-1">${review.getComment()}</p>
+            <div class="figure w-25">
+                <#if review.filename??>
+                    <img src="/img/${review.filename}" class="img-fluid rounded z-depth-2 mb-4" alt="No image"/>
+                </#if>
+            </div>
             <div class="d-flex w-100 justify-content-between">
                 <div class="text-muted"><a
                             href="/user-reviews/${review.getUser().getId()}">${review.getUser().getFirstName()}</a>

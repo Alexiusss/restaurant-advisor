@@ -8,16 +8,15 @@ import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import com.example.restaurant_advisor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
+import static com.example.restaurant_advisor.util.ControllerUtils.saveFile;
 
 @Controller
 public class ReviewController {
@@ -35,6 +35,9 @@ public class ReviewController {
     RestaurantRepository restaurantRepository;
     @Autowired
     UserRepository userRepository;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @GetMapping(value = "/user-reviews/{userId}")
     public String userReviews(@AuthenticationPrincipal AuthUser currentUser,
@@ -68,7 +71,7 @@ public class ReviewController {
     // https://stackoverflow.com/a/58317766
     public String addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
                             BindingResult bindingResult, Model model,
-                            @PathVariable int id) {
+                            @PathVariable int id, @RequestParam("photo") MultipartFile photo) throws IOException {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = getErrors(bindingResult);
@@ -78,6 +81,7 @@ public class ReviewController {
             review.setDate(LocalDate.now());
             review.setUser(authUser.getUser());
             review.setRestaurant(restaurantRepository.getOne(id));
+            review.setFilename(saveFile(photo, uploadPath));
             model.addAttribute("review", null);
             reviewRepository.save(review);
         }
@@ -92,14 +96,10 @@ public class ReviewController {
     @PostMapping(value = "/reviews")
     public String updateReview(
             @RequestParam(value = "id") Review review,
-            @RequestParam("rating") int rating,
             @RequestParam("title") String title,
-            @RequestParam("comment") String comment
-    ) throws IOException {
-
-        if (!ObjectUtils.isEmpty(rating)) {
-            review.setRating(rating);
-        }
+            @RequestParam("comment") String comment,
+            @RequestParam(value = "active", required = false) boolean active
+    ) {
 
         if (!ObjectUtils.isEmpty(title)) {
             review.setTitle(title);
@@ -108,6 +108,8 @@ public class ReviewController {
         if (!ObjectUtils.isEmpty(comment)) {
             review.setComment(comment);
         }
+
+        review.setActive(active);
 
         reviewRepository.save(review);
 
