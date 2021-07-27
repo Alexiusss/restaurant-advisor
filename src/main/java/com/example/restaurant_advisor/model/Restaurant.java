@@ -36,7 +36,7 @@ public class Restaurant extends BaseEntity {
     private Contact contact;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Review> reviews;
 
     private String filename;
@@ -44,6 +44,7 @@ public class Restaurant extends BaseEntity {
     public double rating() {
         if (reviews == null) return 0;
         return reviews.stream()
+                .filter(Review::isActive)
                 .mapToDouble(Review::getRating)
                 .average().orElse(0);
     }

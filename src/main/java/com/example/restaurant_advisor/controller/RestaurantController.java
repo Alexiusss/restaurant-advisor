@@ -1,6 +1,7 @@
 package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.model.Restaurant;
+import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
@@ -20,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 import static com.example.restaurant_advisor.util.ControllerUtils.saveFile;
@@ -45,8 +48,13 @@ public class RestaurantController {
     @GetMapping("/main/{id}")
     public String get(@PathVariable int id, Model model) {
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
+        Set<Review> reviews = null;
+        if (restaurant.getReviews() != null) {
+            reviews = restaurant.getReviews().stream().filter(Review::isActive).collect(Collectors.toSet());
+            restaurant.setReviews(reviews);
+        }
         model.addAttribute("restaurant", restaurant);
-        model.addAttribute("reviews", restaurant.getReviews());
+        model.addAttribute("reviews", reviews);
         return "restaurant";
     }
 
