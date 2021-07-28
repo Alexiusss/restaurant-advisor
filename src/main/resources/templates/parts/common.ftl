@@ -6,6 +6,8 @@
         <title>Restaurant advisor</title>
         <link rel="stylesheet" href="/static/style.css"/>
 
+<#--        https://qna.habr.com/q/618257-->
+        <meta name="_csrf" content="${_csrf.token}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
         <!-- Latest compiled and minified CSS -->
@@ -27,6 +29,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
@@ -42,5 +45,13 @@
         </script>
     </#if>
     </body>
+
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')
+            }
+        });
+    </script>
     </html>
 </#macro>

@@ -3,7 +3,7 @@
     <ul class="list-group">
         <li class="list-group-item <#if !review.isActive()>list-group-item-light</#if>">
 
-             <div class="d-flex w-100 justify-content-between">
+            <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">${review.getTitle()}</h5>
                 <small class="text-muted">${review.getDate().year}</small>
             </div>
@@ -27,9 +27,9 @@
                         </#if>
                     </#if>
                     <#if currentUserId == review.getUser().getId() && currentPageUrl?contains("user-reviews")>
-                    <a href="#" class="btn btn-outline-danger">
+                    <button class="btn btn-outline-danger" id="deleteReview" onclick="deleteReview(${review.getId()})">
                         Delete
-                    </a>
+                    </button>
                 </div>
             </div>
             </#if>

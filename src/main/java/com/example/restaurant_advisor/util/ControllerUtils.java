@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.util;
 
+import com.example.restaurant_advisor.error.NotFoundException;
 import lombok.experimental.UtilityClass;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -39,7 +40,12 @@ public class ControllerUtils {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
         }
         return resultFileName;
+    }
 
+    public static void checkSingleModification(int count, String msg) {
+        if (count != 1) {
+            throw new NotFoundException(msg);
+        }
     }
 
 }

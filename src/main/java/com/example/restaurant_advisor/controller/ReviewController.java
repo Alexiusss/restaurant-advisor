@@ -9,16 +9,14 @@ import com.example.restaurant_advisor.repository.ReviewRepository;
 import com.example.restaurant_advisor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -27,8 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
-import static com.example.restaurant_advisor.util.ControllerUtils.saveFile;
+import static com.example.restaurant_advisor.util.ControllerUtils.*;
 
 @Controller
 public class ReviewController {
@@ -117,5 +114,11 @@ public class ReviewController {
         reviewRepository.save(review);
 
         return "redirect:/reviews";
+    }
+
+    @DeleteMapping(value = "/user-reviews/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteReview(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
+        checkSingleModification(reviewRepository.delete(id, authUser.id()), "Review id=" + id + ", user id=" + authUser.id() + " missed");
     }
 }

@@ -1,3 +1,4 @@
+<script type="text/javascript" src="../../static/js/common.js"></script>
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 
