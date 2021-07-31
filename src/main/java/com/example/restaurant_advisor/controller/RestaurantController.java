@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,14 +48,24 @@ public class RestaurantController {
 
     @GetMapping("/main/{id}")
     public String get(@PathVariable int id, Model model) {
+
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
+
         Set<Review> reviews = null;
+        Map<Integer, Integer> ratings = new HashMap<>();
         if (restaurant.getReviews() != null) {
             reviews = restaurant.getReviews().stream().filter(Review::isActive).collect(Collectors.toSet());
+            // https://stackoverflow.com/a/51541841
+            reviews.forEach(s -> ratings.merge(s.getRating(), 1, Math::addExact));
             restaurant.setReviews(reviews);
         }
+        for (int i = 0; i < +5; i++) {
+            ratings.putIfAbsent(i, 0);
+        }
+
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("reviews", reviews);
+        model.addAttribute("ratings", ratings);
         return "restaurant";
     }
 
