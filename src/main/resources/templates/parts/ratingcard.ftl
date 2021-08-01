@@ -1,4 +1,4 @@
-Added ratings and reviews card into restaurant page<#--https://bbbootstrap.com/snippets/rating-and-review-system-user-comment-section-41283119-->
+<#--https://bbbootstrap.com/snippets/rating-and-review-system-user-comment-section-41283119-->
 <div class="container-fluid px-1 py-5 mx-auto">
     <div class="row justify-content-center">
         <div class="row justify-content-left d-flex">

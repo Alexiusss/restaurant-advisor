@@ -1,6 +1,6 @@
 <#include "security.ftl">
 <#list reviews as review>
-    <ul class="list-group">
+    <ul class="list-group" id="review_${review.getId()}">
         <li class="list-group-item <#if !review.isActive()>list-group-item-light</#if>">
 
             <div class="d-flex w-100 justify-content-between">
