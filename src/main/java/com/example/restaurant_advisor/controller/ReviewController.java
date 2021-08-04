@@ -9,6 +9,10 @@ import com.example.restaurant_advisor.repository.ReviewRepository;
 import com.example.restaurant_advisor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
@@ -57,11 +60,13 @@ public class ReviewController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/reviews")
-    public String getAllReviews(Model model, @RequestParam(required = false) Review review) {
+    public String getAllReviews(Model model, @RequestParam(required = false) Review review,
+                                @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<Review> reviews = reviewRepository.getAllReviews();
+        Page<Review> page = reviewRepository.getAllReviews(pageable);
 
-        model.addAttribute("reviews", reviews);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/reviews");
         model.addAttribute("reviewEdit", review);
 
         return "reviews";

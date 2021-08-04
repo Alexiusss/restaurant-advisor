@@ -1,6 +1,8 @@
 package com.example.restaurant_advisor.repository;
 
 import com.example.restaurant_advisor.model.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,5 +25,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @EntityGraph(attributePaths = {"user"}, type = EntityGraph.EntityGraphType.FETCH)
     @Query("SELECT r FROM Review r ORDER BY r.active, r.date DESC ")
-    List<Review> getAllReviews();
+    Page<Review> getAllReviews(Pageable pageable);
 }

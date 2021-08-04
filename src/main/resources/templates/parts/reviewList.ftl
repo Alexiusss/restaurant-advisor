@@ -1,5 +1,8 @@
 <#include "security.ftl">
-<#list reviews as review>
+<#import "pager.ftl" as p>
+
+<@p.pager url page />
+<#list page.content as review>
     <ul class="list-group" id="review_${review.getId()}">
         <li class="list-group-item <#if !review.isActive()>list-group-item-light</#if>">
 
@@ -37,3 +40,5 @@
     </ul>
     <#include "reviewEdit.ftl">
 </#list>
+
+<@p.pager url page />
