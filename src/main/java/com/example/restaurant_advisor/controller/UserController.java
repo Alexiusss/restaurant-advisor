@@ -6,6 +6,10 @@ import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
 import com.example.restaurant_advisor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -31,8 +35,11 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String userList(Model model,
+                           @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<User> page = userRepository.findAll(pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/user");
         return "userList";
     }
 

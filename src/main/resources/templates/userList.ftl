@@ -1,7 +1,10 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/pager.ftl" as p>
 
 <@c.page>
     List of users
+
+    <@p.pager url page />
 
     <table>
         <thead>
@@ -14,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <#list users as user>
+        <#list page.content as user>
             <tr>
                 <td>${user.firstName}</td>
                 <td>${user.lastName}</td>
@@ -25,4 +28,6 @@
         </#list>
         </tbody>
     </table>
+
+    <@p.pager url page />
 </@c.page>
