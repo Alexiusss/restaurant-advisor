@@ -17,7 +17,7 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString(callSuper = true, exclude = {"password", "reviews", "subscribers", "subscriptions"})
 public class User extends BaseEntity {
 
