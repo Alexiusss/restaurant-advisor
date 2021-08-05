@@ -2,12 +2,16 @@ package com.example.restaurant_advisor.util;
 
 import com.example.restaurant_advisor.error.NotFoundException;
 import lombok.experimental.UtilityClass;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collector;
@@ -48,4 +52,10 @@ public class ControllerUtils {
         }
     }
 
+    // https://stackoverflow.com/a/37771947
+    public static <T> Page<T> createPageFromList(Pageable pageable, List<T> list) {
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), list.size());
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
+    }
 }

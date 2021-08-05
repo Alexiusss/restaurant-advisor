@@ -7,6 +7,10 @@ import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
-import static com.example.restaurant_advisor.util.ControllerUtils.saveFile;
+import static com.example.restaurant_advisor.util.ControllerUtils.*;
 
 @Controller
 public class RestaurantController {
@@ -47,24 +48,28 @@ public class RestaurantController {
     }
 
     @GetMapping("/main/{id}")
-    public String get(@PathVariable int id, Model model) {
+    public String get(@PathVariable int id, Model model,
+                      @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
 
-        Set<Review> reviews = null;
+        Set<Review> reviews;
+        Page<Review> page = null;
         Map<Integer, Integer> ratings = new HashMap<>();
         if (restaurant.getReviews() != null) {
             reviews = restaurant.getReviews().stream().filter(Review::isActive).collect(Collectors.toSet());
             // https://stackoverflow.com/a/51541841
             reviews.forEach(s -> ratings.merge(s.getRating(), 1, Math::addExact));
             restaurant.setReviews(reviews);
+            page = createPageFromList(pageable, new ArrayList<>(reviews));
         }
         for (int i = 0; i < +5; i++) {
             ratings.putIfAbsent(i, 0);
         }
 
         model.addAttribute("restaurant", restaurant);
-        model.addAttribute("reviews", reviews);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/main/" + id);
         model.addAttribute("ratings", ratings);
         return "restaurant";
     }
@@ -72,8 +77,9 @@ public class RestaurantController {
     @GetMapping("/main")
     public String main(@RequestParam(required = false, defaultValue = "") String filter,
                        @RequestParam(required = false, defaultValue = "") String cuisine,
-                       Model model) {
-        Iterable<Restaurant> restaurants;
+                       Model model,
+                       @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        List<Restaurant> restaurants;
 
         if (filter != null && !filter.isEmpty()) {
             restaurants = restaurantRepository.findByCuisineOrNameContains(filter);
@@ -82,7 +88,10 @@ public class RestaurantController {
         } else {
             restaurants = restaurantRepository.getAllWithReviewsAndContact();
         }
-        model.addAttribute("restaurants", restaurants);
+        Page<Restaurant> page = createPageFromList(pageable, restaurants);
+
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
         model.addAttribute("cuisine", cuisine);
         return "main";

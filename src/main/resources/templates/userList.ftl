@@ -4,8 +4,6 @@
 <@c.page>
     List of users
 
-    <@p.pager url page />
-
     <table>
         <thead>
         <tr>

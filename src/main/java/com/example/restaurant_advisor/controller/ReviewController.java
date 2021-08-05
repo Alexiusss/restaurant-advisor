@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
@@ -44,15 +45,18 @@ public class ReviewController {
 
     @GetMapping(value = "/user-reviews/{userId}")
     public String userReviews(@AuthenticationPrincipal AuthUser currentUser,
-                              @PathVariable int userId, Model model) {
+                              @PathVariable int userId, Model model,
+                              @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        Page<Review> page = createPageFromList(pageable, new ArrayList<>(user.getReviews()));
 
         model.addAttribute("userChannel", user);
         model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
         model.addAttribute("subscribersCount", user.getSubscribers().size());
         model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser.getUser()));
-        model.addAttribute("reviews", user.getReviews());
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/user-reviews/" + currentUser.id());
         model.addAttribute("isCurrentUser", currentUser.getUser().equals(user));
 
         return "userReviews";

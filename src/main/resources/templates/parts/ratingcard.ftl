@@ -15,7 +15,7 @@
                              data-rateyo-read-only="true"></div>
                     </div>
                 </#if>
-                <#assign reviews_count = reviews?size>
+                <#assign reviews_count = page.content?size>
                 <div class="text-center">
                     ${reviews_count} reviews
                 </div>

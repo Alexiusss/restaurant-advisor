@@ -1,5 +1,6 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
+<#import "parts/pager.ftl" as p>
 
 <@c.page>
     <div class="form-row">
@@ -31,7 +32,7 @@
     </#if>
 
     <div class="card-columns" id="restaurant-list">
-        <#list restaurants as restaurant>
+        <#list page.content as restaurant>
             <div class="card my-3" data-id="${restaurant.getId()}">
                 <div>
                     <#if restaurant.filename??>
@@ -59,6 +60,8 @@
             No restaurant
         </#list>
     </div>
+
+    <@p.pager url page />
 
 </@c.page>
 <script>
