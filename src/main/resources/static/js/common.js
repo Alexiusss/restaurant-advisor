@@ -27,3 +27,27 @@ function successNoty(msg) {
 function removeElement(id, elementName) {
     $(elementName + id).remove();
 }
+
+function like(id) {
+    $.ajax({
+        url: "/reviews/" + id + "/like",
+        type: "GET",
+        success: function () {
+            // https://stackoverflow.com/a/45661901
+            let $count = $('.likes-count_' + id);
+            let liked = document.getElementById("likeReview_" + id).className === "fas fa-heart";
+            $count.text(function (idx, txt) {
+                if (liked) {
+                    return (+txt === 0) ? 0 : (+txt - 1);
+                } else {
+                    return +txt + 1;
+                }
+            });
+            // https://qr.ae/pGOoOz
+            $("#likeReview_" + id).toggleClass("fas fa-heart far fa-heart");
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    })
+}

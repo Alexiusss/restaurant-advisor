@@ -1,7 +1,6 @@
 package com.example.restaurant_advisor.repository;
 
 import com.example.restaurant_advisor.model.User;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +20,11 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
 
     User findByActivationCode(String code);
 
-    @EntityGraph(attributePaths = {"reviews", "subscribers", "subscriptions"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT u FROM User u where u.id=?1")
+    @Query("SELECT u FROM User u " +
+            "LEFT OUTER JOIN FETCH u.reviews ur " +
+            "LEFT OUTER JOIN FETCH u.subscribers " +
+            "LEFT OUTER JOIN FETCH u.subscriptions " +
+            "LEFT OUTER JOIN FETCH ur.likes " +
+            "where u.id=?1")
     Optional<User> getWithReviewsAndSubscriptionsAndSubscribers(int userId);
 }

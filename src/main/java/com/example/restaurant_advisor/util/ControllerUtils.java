@@ -1,6 +1,9 @@
 package com.example.restaurant_advisor.util;
 
 import com.example.restaurant_advisor.error.NotFoundException;
+import com.example.restaurant_advisor.model.Review;
+import com.example.restaurant_advisor.model.User;
+import com.example.restaurant_advisor.model.dto.ReviewDto;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,7 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -54,8 +59,18 @@ public class ControllerUtils {
 
     // https://stackoverflow.com/a/37771947
     public static <T> Page<T> createPageFromList(Pageable pageable, List<T> list) {
-        final int start = (int)pageable.getOffset();
+        final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), list.size());
         return new PageImpl<>(list.subList(start, end), pageable, list.size());
+    }
+
+    public static List<ReviewDto> createListReviewTos(Set<Review> reviews, User currentUser) {
+        return reviews.stream()
+                .filter(review -> review.getUser().equals(currentUser) || review.isActive())
+                .map(review ->
+                        new ReviewDto(review, (long) review.getLikes().size(),
+                                review.getLikes().stream()
+                                        .anyMatch(Predicate.isEqual(currentUser))))
+                .collect(Collectors.toList());
     }
 }

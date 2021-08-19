@@ -1,3 +1,4 @@
+<script type="text/javascript" src="../../static/js/common.js"></script>
 <#include "security.ftl">
 <#import "pager.ftl" as p>
 
@@ -17,8 +18,18 @@
             </div>
             <div class="d-flex w-100 justify-content-between">
                 <div class="text-muted"><a
-                            href="/user-reviews/${review.getUser().getId()}">${review.getUser().getFirstName()}</a>
+                            href="/user-reviews/${review.getAuthor().getId()}">${review.getAuthorName()}</a>
                 </div>
+                <#if review.isActive()>
+                <a class="float-center" onclick="like(${review.getId()})">
+                    <#if review.meLiked>
+                        <i id="likeReview_${review.getId()}" class="fas fa-heart"></i>
+                    <#else>
+                        <i id="likeReview_${review.getId()}" class="far fa-heart"></i>
+                    </#if>
+                    <span class="likes-count_${review.getId()}"> ${review.likes} </span>
+                </a>
+                </#if>
                 <div class="float-right">
                     <#if isAdmin>
                         <#if currentPageUrl == "/reviews">
@@ -28,7 +39,7 @@
                             </a>
                         </#if>
                     </#if>
-                    <#if currentUserId == review.getUser().getId() && currentPageUrl?contains("user-reviews")>
+                    <#if currentUserId == review.getAuthor().getId() && currentPageUrl?contains("user-reviews")>
                     <button class="btn btn-outline-danger" id="deleteReview" onclick="deleteReview(${review.getId()})">
                         Delete
                     </button>

@@ -23,7 +23,11 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     @Query("SELECT r FROM Restaurant r")
     List<Restaurant> getAllWithReviewsAndContact();
 
-    @EntityGraph(attributePaths = {"reviews", "contact"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r WHERE r.id=?1")
+    @Query("SELECT r FROM Restaurant r " +
+            "LEFT OUTER JOIN FETCH r.reviews rr " +
+            "LEFT OUTER JOIN FETCH r.contact c " +
+            "LEFT OUTER JOIN FETCH rr.user ru " +
+            "LEFT OUTER JOIN FETCH rr.likes rl " +
+            "WHERE r.id=?1")
     Optional<Restaurant> getWithReviewsAndContact(int id);
 }
