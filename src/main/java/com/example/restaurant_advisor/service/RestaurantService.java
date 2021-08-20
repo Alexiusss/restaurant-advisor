@@ -1,6 +1,6 @@
 package com.example.restaurant_advisor.service;
 
-import com.example.restaurant_advisor.model.Restaurant;
+import com.example.restaurant_advisor.model.dto.RestaurantDto;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,18 +17,17 @@ public class RestaurantService {
     @Autowired
     RestaurantRepository restaurantRepository;
 
-    public Page<Restaurant> restaurantList(Pageable pageable, String filter, String cuisine) {
+    public Page<RestaurantDto> restaurantList(Pageable pageable, String filter, String cuisine) {
 
-        List<Restaurant> restaurants;
+        List<RestaurantDto> restaurants;
 
         if (filter != null && !filter.isEmpty()) {
             restaurants = restaurantRepository.findByCuisineOrNameContains(filter);
         } else if (cuisine != null && !cuisine.isEmpty()) {
             restaurants = restaurantRepository.findByCuisineOrNameContains(cuisine);
         } else {
-            restaurants = restaurantRepository.getAllWithReviewsAndContact();
+            restaurants = restaurantRepository.getAll();
         }
-
         return createPageFromList(pageable, restaurants);
     }
 }

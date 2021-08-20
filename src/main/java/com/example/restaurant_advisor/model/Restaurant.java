@@ -41,14 +41,6 @@ public class Restaurant extends BaseEntity {
 
     private String filename;
 
-    public double rating() {
-        if (reviews == null) return 0;
-        return reviews.stream()
-                .filter(Review::isActive)
-                .mapToDouble(Review::getRating)
-                .average().orElse(0);
-    }
-
     public Restaurant(String name, String cuisine) {
         super(null);
         this.name = name;

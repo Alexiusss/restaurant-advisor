@@ -2,6 +2,7 @@ package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Restaurant;
+import com.example.restaurant_advisor.model.dto.RestaurantDto;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
 import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
@@ -60,7 +61,7 @@ public class RestaurantController {
 
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
 
-        List<ReviewDto> reviews;
+        List<ReviewDto> reviews = null;
         Page<ReviewDto> page = null;
         Map<Integer, Integer> ratings = new HashMap<>();
         if (restaurant.getReviews() != null) {
@@ -76,6 +77,7 @@ public class RestaurantController {
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("page", page);
         model.addAttribute("url", "/main/" + id);
+        model.addAttribute("rating", getRestaurantRating(reviews));
         model.addAttribute("ratings", ratings);
         return "restaurant";
     }
@@ -86,7 +88,7 @@ public class RestaurantController {
                        Model model,
                        @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
-        Page<Restaurant> page = restaurantService.restaurantList(pageable, filter, cuisine);
+        Page<RestaurantDto> page = restaurantService.restaurantList(pageable, filter, cuisine);
 
         model.addAttribute("page", page);
         model.addAttribute("url", "/main");
@@ -105,18 +107,11 @@ public class RestaurantController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("restaurant", restaurant);
         } else {
-
             restaurant.setFilename(saveFile(file, uploadPath));
-
             model.addAttribute("restaurant", null);
-
             restaurantRepository.save(restaurant);
         }
-
-        Iterable<Restaurant> restaurants = restaurantRepository.getAllWithReviewsAndContact();
-
-        model.addAttribute("restaurants", restaurants);
-        return "main";
+        return "redirect:/main/";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

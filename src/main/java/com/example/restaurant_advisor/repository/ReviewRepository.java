@@ -5,14 +5,11 @@ import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional(readOnly = true)
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
@@ -21,10 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Transactional
     @Query("DELETE FROM Review r WHERE r.id=:id AND r.user.id=:userId")
     int delete(int id, int userId);
-
-    @EntityGraph(attributePaths = {"user"}, type = EntityGraph.EntityGraphType.FETCH)
-    @Query("SELECT r FROM Review r WHERE r.user.id=?1" )
-    List<Review> getAllByUserId(int id);
 
     @Query("SELECT NEW com.example.restaurant_advisor.model.dto.ReviewDto( " +
             "r, " +

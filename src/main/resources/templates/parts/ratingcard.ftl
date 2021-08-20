@@ -4,13 +4,13 @@
         <div class="row justify-content-left d-flex">
             <div class="col-md-4 d-flex flex-column">
                 <div class="rating-box">
-                    <h1 class="pt-4">${restaurant.rating()}</h1>
+                    <h1 class="pt-4">${rating}</h1>
                     <p class="">out of 5</p>
                 </div>
-                <#if (restaurant.rating() > 0)??>
+                <#if (rating > 0)??>
                     <div>
                         <div class="rateyo"
-                             data-rateyo-rating="${restaurant.rating()}"
+                             data-rateyo-rating="${rating}"
                              data-rateyo-num-stars="5"
                              data-rateyo-read-only="true"></div>
                     </div>

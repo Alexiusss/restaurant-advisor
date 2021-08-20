@@ -25,6 +25,6 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
             "LEFT OUTER JOIN FETCH u.subscribers " +
             "LEFT OUTER JOIN FETCH u.subscriptions " +
             "LEFT OUTER JOIN FETCH ur.likes " +
-            "where u.id=?1")
+            "WHERE u.id=?1")
     Optional<User> getWithReviewsAndSubscriptionsAndSubscribers(int userId);
 }

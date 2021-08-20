@@ -11,7 +11,7 @@
                 </#if>
                 <div class="card-body">
                     <h5 class="card-title">${restaurant.getName()}</h5>
-                    <div>${restaurant.rating()} </div>
+                    <div>${rating} </div>
                     <p class="card-text">${restaurant.getCuisine()}</p>
                 </div>
 
@@ -62,9 +62,10 @@
                 </div>
 
                 <div class="card mb-1" style="height:16rem">
-                    <#if (restaurant.rating() == 0)>
+                    <#if rating==0 >
                         <div>
-                        ${restaurant.getName()} does not have enough reviews. Be one of the first people to write a review!
+                            ${restaurant.getName()} does not have enough reviews. Be one of the first people to write a
+                            review!
                         </div>
                     <#else>
                         <#include "parts/ratingcard.ftl"/>

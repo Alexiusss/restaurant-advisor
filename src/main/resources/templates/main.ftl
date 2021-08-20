@@ -44,10 +44,10 @@
                     <span>${restaurant.name}</span>
                 </div>
                 <#--                https://stackoverflow.com/questions/45523742/how-can-i-use-rate-yo-jquery-star-rating-plugin-with-data-attribute-->
-                <#if (restaurant.rating() > 0)??>
+                <#if (restaurant.getRating() > 0)??>
                     <div>
                         <div class="rateyo"
-                             data-rateyo-rating="${restaurant.rating()}"
+                             data-rateyo-rating="${restaurant.getRating()}"
                              data-rateyo-num-stars="5"
                              data-rateyo-read-only="true"></div>
                     </div>

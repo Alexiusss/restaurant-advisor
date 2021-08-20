@@ -73,4 +73,12 @@ public class ControllerUtils {
                                         .anyMatch(Predicate.isEqual(currentUser))))
                 .collect(Collectors.toList());
     }
+
+    public static double getRestaurantRating(List<ReviewDto> reviews) {
+        if (reviews == null) return 0;
+        return reviews.stream()
+                .filter(ReviewDto::isActive)
+                .mapToDouble(ReviewDto::getRating)
+                .average().orElse(0);
+    }
 }
