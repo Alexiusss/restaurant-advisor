@@ -35,8 +35,7 @@ public class Restaurant extends BaseEntity {
     @PrimaryKeyJoinColumn
     private Contact contact;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant",
-            cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant") //, cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Review> reviews;
 
     private String filename;

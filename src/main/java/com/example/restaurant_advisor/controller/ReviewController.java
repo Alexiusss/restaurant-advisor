@@ -1,7 +1,6 @@
 package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
-import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
@@ -114,11 +113,7 @@ public class ReviewController {
             model.addAttribute("review", null);
             reviewRepository.save(review);
         }
-
-        Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
-        model.addAttribute("restaurant", restaurant);
-        model.addAttribute("reviews", restaurant.getReviews());
-        return "restaurant";
+        return "redirect:/main/" + id;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

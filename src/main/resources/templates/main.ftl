@@ -1,3 +1,4 @@
+<script type="text/javascript" src="../../static/js/common.js"></script>
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "parts/pager.ftl" as p>
@@ -33,7 +34,8 @@
 
     <div class="card-columns" id="restaurant-list">
         <#list page.content as restaurant>
-            <div class="card my-3" data-id="${restaurant.getId()}">
+<#--            <div class="card my-3" data-id="${restaurant.getId()}">-->
+            <div class="card my-3" id="restaurant-card_${restaurant.getId()}">
                 <div>
                     <#if restaurant.filename??>
                         <img src="/img/${restaurant.filename}" class="card-img-top"
@@ -52,9 +54,18 @@
                              data-rateyo-read-only="true"></div>
                     </div>
                 </#if>
+                <row>
                 <div class="m-2">
                     <i>${restaurant.cuisine}</i>
                 </div>
+                <#if isAdmin>
+                    <div class="float-right">
+                    <button class="btn btn-outline-danger" id="deleteRestaurant" onclick="deleteRestaurant(${restaurant.getId()}, '${restaurant.getName()}')">
+                        Delete
+                    </button>
+                    </div>
+                </#if>
+                </row>
             </div>
         <#else>
             No restaurant

@@ -3,6 +3,7 @@ package com.example.restaurant_advisor.repository;
 import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.model.dto.RestaurantDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,11 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Restaurant r WHERE r.id=:id")
+    int delete(int id);
 
     @Query("SELECT DISTINCT NEW com.example.restaurant_advisor.model.dto.RestaurantDto( " +
             "r, " +
