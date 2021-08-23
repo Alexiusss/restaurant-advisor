@@ -1,5 +1,5 @@
 <#import "parts/common.ftl" as c>
-
+<input type="hidden" value="recaptcha_tags ajax: true">
 <@c.page>
     <div class="mb-1">Add new user</div>
     <form action="/registration" method="post" xmlns="http://www.w3.org/1999/html">

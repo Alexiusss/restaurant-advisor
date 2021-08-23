@@ -34,7 +34,6 @@
 
     <div class="card-columns" id="restaurant-list">
         <#list page.content as restaurant>
-<#--            <div class="card my-3" data-id="${restaurant.getId()}">-->
             <div class="card my-3" id="restaurant-card_${restaurant.getId()}">
                 <div>
                     <#if restaurant.filename??>
@@ -76,5 +75,5 @@
 
 </@c.page>
 <script>
-    $(".rateyo").rateYo();
+    setTimeout(function(){$(".rateyo").rateYo()}, 10)
 </script>

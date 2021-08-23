@@ -74,3 +74,8 @@ body {
     background-color: #FBC02D;
     border-radius: 20px
 }
+
+.turbolinks-progress-bar {
+    height: 2px;
+    background-color: navy;
+}
