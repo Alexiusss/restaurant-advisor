@@ -6,10 +6,7 @@ import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
 import com.example.restaurant_advisor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.example.restaurant_advisor.util.ControllerUtils.checkSingleModification;
 import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
 
 @Controller
@@ -35,11 +33,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model,
-                           @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<User> page = userRepository.findAll(pageable);
-        model.addAttribute("page", page);
-        model.addAttribute("url", "/user");
+    public String userList(Model model) {
+        model.addAttribute("users", userRepository.findAll());
         return "userList";
     }
 
@@ -80,6 +75,13 @@ public class UserController {
         userRepository.save(user);
 
         return "redirect:/user";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable int id) {
+        checkSingleModification(userRepository.delete(id), "User id= " + id + " missed");
     }
 
     @GetMapping("profile")

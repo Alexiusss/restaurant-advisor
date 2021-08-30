@@ -36,8 +36,8 @@
         </dependency>
 
         <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-validation</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <!-- Database Support -->
@@ -59,7 +59,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-<!--            https://github.com/projectlombok/lombok/issues/2790-->
+            <!--            https://github.com/projectlombok/lombok/issues/2790-->
             <version>1.18.20</version>
         </dependency>
 
@@ -88,6 +88,17 @@
             <groupId>org.webjars.bower</groupId>
             <artifactId>noty</artifactId>
             <version>3.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>datatables</artifactId>
+            <version>1.10.20</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Testing -->

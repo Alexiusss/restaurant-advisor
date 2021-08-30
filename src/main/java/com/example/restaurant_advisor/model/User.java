@@ -53,7 +53,6 @@ public class User extends BaseEntity {
     @Column(name = "role")
     @JoinColumn(name = "user_id")
     @ElementCollection(fetch = FetchType.EAGER)
-    @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)

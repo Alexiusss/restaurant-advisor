@@ -67,3 +67,23 @@ function like(id) {
         }
     })
 }
+
+$(function () {
+    $("#datatable").DataTable();
+})
+
+function deleteUser(id) {
+    if (confirm("Are you sure you want to delete user with " + id + " ?")) {
+        $.ajax({
+            url: "/user/" + id,
+            type: "DELETE",
+            success: function () {
+                removeElement(id, "#user-id_")
+                successNoty("User with " + id + " successfully deleted!")
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText);
+            }
+        })
+    }
+}

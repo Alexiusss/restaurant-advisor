@@ -16,6 +16,11 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
     @Transactional
     User save(User user);
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM User r WHERE r.id=:id")
+    int delete(int id);
+
     Optional<User> findByEmailIgnoreCase(String email);
 
     User findByActivationCode(String code);
