@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,9 +34,15 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String userList() {
         return "userList";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/getAll")
+    @ResponseBody
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

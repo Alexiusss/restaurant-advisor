@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -59,6 +60,7 @@ public class User extends BaseEntity {
     @OrderBy("date DESC")
     //https://stackoverflow.com/a/44988100/548473
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Set<Review> reviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -67,6 +69,7 @@ public class User extends BaseEntity {
             joinColumns = { @JoinColumn(name = "channel_id") },
             inverseJoinColumns = { @JoinColumn(name = "subscriber_id") }
     )
+    @JsonIgnore
     private Set<User> subscribers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -75,6 +78,7 @@ public class User extends BaseEntity {
             joinColumns = { @JoinColumn(name = "subscriber_id") },
             inverseJoinColumns = { @JoinColumn(name = "channel_id") }
     )
+    @JsonIgnore
     private Set<User> subscriptions = new HashSet<>();
 
     public User(Integer id, String email, String firstName, String lastName, String password, boolean active, String activationCode, Collection<Role> roles) {
