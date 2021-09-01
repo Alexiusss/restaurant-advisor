@@ -84,4 +84,10 @@ public class UserService implements UserDetailsService {
         user.getSubscribers().remove(currentUser.getUser());
         userRepository.save(user);
     }
+
+    @Transactional
+    public void activate(int id, boolean enabled) {
+        User user = userRepository.getOne(id);
+        user.setActive(enabled);
+    }
 }
