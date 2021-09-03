@@ -79,3 +79,7 @@ body {
     height: 2px;
     background-color: navy;
 }
+
+tr[data-user-active="false"] {
+    opacity: 0.3;
+}

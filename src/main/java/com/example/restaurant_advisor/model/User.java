@@ -1,6 +1,7 @@
 package com.example.restaurant_advisor.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,10 +41,13 @@ public class User extends BaseEntity {
 
     @Column(name = "password", nullable = false)
     @NotBlank(message = "Password cannot be empty")
+    // https://stackoverflow.com/a/12505165/548473
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Transient
     @NotBlank(message = "Password2 cannot be empty")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password2;
 
     @Column(name = "active", nullable = false, columnDefinition = "bool default false")

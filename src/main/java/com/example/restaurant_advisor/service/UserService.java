@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
 
@@ -53,6 +52,23 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @Transactional
+    public void updateUser(User user, Map<String, String> form) {
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+
+        Set<Role> userRoles = new HashSet<>();
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                userRoles.add(Role.valueOf(key));
+            }
+        }
+        user.setRoles(userRoles);
+
+        prepareAndSave(user);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return new AuthUser(userRepository.findByEmailIgnoreCase(username.toLowerCase()).orElseThrow(
@@ -79,6 +95,7 @@ public class UserService implements UserDetailsService {
         user.getSubscribers().add(currentUser.getUser());
         userRepository.save(user);
     }
+
     @Transactional
     public void unsubscribe(AuthUser currentUser, User user) {
         user.getSubscribers().remove(currentUser.getUser());
@@ -89,5 +106,9 @@ public class UserService implements UserDetailsService {
     public void activate(int id, boolean enabled) {
         User user = userRepository.getOne(id);
         user.setActive(enabled);
+    }
+
+    public void prepareAndSave(User user) {
+        userRepository.save(prepareToSave(user));
     }
 }

@@ -1,7 +1,6 @@
 package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
-import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
 import com.example.restaurant_advisor.service.UserService;
@@ -14,14 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.checkSingleModification;
-import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
 
 @Controller
 @RequestMapping("/user")
@@ -46,42 +42,22 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
-
-        return "userEdit";
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    public User getUser(@PathVariable int id) {
+        return userRepository.findById(id).orElse(null);
     }
+
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public String userSave(
-            @RequestParam String firstname,
-            @RequestParam String lastname,
-            @RequestParam String email,
-            @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user
-    ) {
-        user.setFirstName(firstname);
-        user.setLastName(lastname);
-        user.setEmail(email);
-
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void userSaveOrUpdate(@Valid User user, @RequestParam Map<String, String> form) {
+        if (user.isNew()) {
+            userService.addUser(user);
+        } else {
+            userService.updateUser(user, form);
         }
-
-        userRepository.save(user);
-
-        return "redirect:/user";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -121,8 +97,7 @@ public class UserController {
             user.setPassword(password);
         }
 
-        userRepository.save(prepareToSave(user));
-
+        userService.prepareAndSave(user);
         return "redirect:/user/profile";
     }
 
