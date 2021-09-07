@@ -1,5 +1,6 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
     <div class="card-deck">
@@ -20,7 +21,7 @@
                         <a class="btn btn-outline-primary" data-toggle="collapse" href="#collapseRestaurant"
                            role="button" aria-expanded="false"
                            aria-controls="collapseRestaurant">
-                            Edit
+                            <@spring.message "common.edit"/>
                         </a>
                     </#if>
                 </div>
@@ -29,7 +30,7 @@
             <div class="card-column">
                 <div class="card text-right mb-1" style="height:17rem">
                     <div class="card-body">
-                        <h5 class="card-title">Location and contact details</h5>
+                        <h5 class="card-title"><@spring.message "contact.title"/></h5>
                         <#if restaurant.contact??>
                             <p class="card-text">${restaurant.contact.getAddress()}</p>
                             <p class="card-text">${restaurant.contact.getPhone_number()}</p>
@@ -44,17 +45,17 @@
                                    role="button"
                                    aria-expanded="false"
                                    aria-controls="collapseContact">
-                                    Edit contact
+                                    <@spring.message "contact.edit"/>
                                 </a>
                             </#if>
                         <#else>
-                            <p class="card-text"><small class="text-muted">No data</small></p>
+                            <p class="card-text"><small class="text-muted"><@spring.message "contact.noData"/></small></p>
 
                             <#if isAdmin>
                                 <a class="btn btn-primary" data-toggle="collapse" href="#collapseContact" role="button"
                                    aria-expanded="false"
                                    aria-controls="collapseExample">
-                                    Add contact
+                                    <@spring.message "contact.add"/>
                                 </a>
                             </#if>
                         </#if>
@@ -64,8 +65,7 @@
                 <div class="card mb-1" style="height:16rem">
                     <#if rating==0 >
                         <div>
-                            ${restaurant.getName()} does not have enough reviews. Be one of the first people to write a
-                            review!
+                            ${restaurant.getName()} <@spring.message "ratingCard.noReviews"/>
                         </div>
                     <#else>
                         <#include "parts/ratingcard.ftl"/>
@@ -90,9 +90,9 @@
 
         <a class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Reviews </h5>
+                <h5 class="mb-1"><@spring.message "review.title"/> </h5>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    Write a review
+                    <@spring.message "review.write"/>
                 </button>
             </div>
         </a>

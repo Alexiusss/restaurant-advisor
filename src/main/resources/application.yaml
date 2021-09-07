@@ -25,8 +25,10 @@ spring:
   freemarker:
     expose-request-attributes: true
     suffix: .ftl
-    #https://stackoverflow.com/a/24811052
+    # https://stackoverflow.com/a/24811052
     expose-spring-macro-helpers: true
+    # https://stackoverflow.com/a/27162270
+    request-context-attribute: rc
     #  https://stackoverflow.com/questions/53172123/flyway-found-non-empty-schemas-public-without-schema-history-table-use-bas
   flyway:
     baseline-on-migrate: true

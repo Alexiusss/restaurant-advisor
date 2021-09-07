@@ -1,38 +1,47 @@
 <#include "security.ftl">
 <#import "login.ftl" as l>
+<#import "/spring.ftl" as spring/>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Restaurant advisor</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="#"><@spring.message "app.title"/></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/"><@spring.message "app.home"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/main">Restaurants</a>
+                <a class="nav-link" href="/main"><@spring.message "restaurant.title"/></a>
             </li>
             <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user">Users</a>
+                    <a class="nav-link" href="/user"><@spring.message "user.title"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/reviews">Reviews</a>
+                    <a class="nav-link" href="/reviews"><@spring.message "review.title"/></a>
                 </li>
             </#if>
             <#if user??>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/profile">Profile</a>
+                    <a class="nav-link" href="/user/profile"><@spring.message "app.profile"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user-reviews/${currentUserId}">My reviews</a>
+                    <a class="nav-link" href="/user-reviews/${currentUserId}"><@spring.message "review.usersReview"/></a>
                 </li>
             </#if>
         </ul>
         <div class="navbar-text mr-3">${name}</div>
         <@l.logout/>
+        <div class="nav-item dropdown">
+            <a class="dropdown-toggle nav-link my-1 ml-2" data-toggle="dropdown">${rc.locale.language!}</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="${rc.contextPath}?lang=en">English</a>
+                <a class="dropdown-item" href="${rc.contextPath}?lang=ru">Русский</a>
+            </div>
+        </div>
     </div>
 </nav>

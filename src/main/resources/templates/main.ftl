@@ -2,14 +2,15 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "parts/pager.ftl" as p>
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
-                <input type="text" name="filter" class="form-control" placeholder="Search by restaurant name"
+                <input type="text" name="filter" class="form-control" placeholder="<@spring.message "restaurant.searchByName"/>"
                        value="${filter!}"/>
-                <button type="submit" class="btn btn-primary ml-2">Search</button>
+                <button type="submit" class="btn btn-primary ml-2"><@spring.message "common.search"/></button>
             </form>
         </div>
     </div>
@@ -17,9 +18,9 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
-                <input type="text" name="cuisine" class="form-control" placeholder="Search by cuisine"
+                <input type="text" name="cuisine" class="form-control" placeholder="<@spring.message "restaurant.searchByCuisine"/>"
                        value="${cuisine!}"/>
-                <button type="submit" class="btn btn-primary ml-2">Search</button>
+                <button type="submit" class="btn btn-primary ml-2"><@spring.message "common.search"/></button>
             </form>
         </div>
     </div>
@@ -27,7 +28,7 @@
     <#if isAdmin>
         <a class="btn btn-primary" data-toggle="collapse" href="#collapseRestaurant" role="button" aria-expanded="false"
            aria-controls="collapseExample">
-            Add new restaurant
+            <@spring.message "restaurant.add"/>
         </a>
         <#include "parts/restaurantEdit.ftl"/>
     </#if>
@@ -60,7 +61,7 @@
                 <#if isAdmin>
                     <div class="float-right">
                     <button class="btn btn-outline-danger" id="deleteRestaurant" onclick="deleteRestaurant(${restaurant.getId()}, '${restaurant.getName()}')">
-                        Delete
+                        <@spring.message "common.delete"/>
                     </button>
                     </div>
                 </#if>
@@ -70,10 +71,9 @@
             No restaurant
         </#list>
     </div>
-
     <@p.pager url page />
-
 </@c.page>
+<#include "parts/i18n.ftl">
 <script>
     setTimeout(function(){$(".rateyo").rateYo()}, 10)
 </script>

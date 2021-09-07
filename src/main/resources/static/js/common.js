@@ -1,11 +1,11 @@
 function deleteReview(id) {
-    if (confirm("Are you sure you want to delete review?")) {
+    if (confirm(i18n["confirmDelete"] + "?")) {
         $.ajax({
             url: "/user-reviews/" + id,
             type: "DELETE",
             success: function () {
                 removeElement(id, "#review_")
-                successNoty("Your review successfully deleted!")
+                successNoty(i18n["deleted"])
             },
             error: function (xhr) {
                 console.log(xhr.responseText);
@@ -15,13 +15,14 @@ function deleteReview(id) {
 }
 
 function deleteRestaurant(id, name) {
-    if (confirm("Are you sure you want to delete " + name + " restaurant?")) {
+    // if (confirm("Are you sure you want to delete " + name + " restaurant?")) {
+    if (confirm(i18n["confirmDelete"] + name + " ?")) {
         $.ajax({
             url: "/main/" + id,
             type: "DELETE",
             success: function () {
                 removeElement(id, "#restaurant-card_")
-                successNoty("Restaurant " + name + " successfully deleted!")
+                successNoty(i18n["deleted"])
             },
             error: function (xhr) {
                 console.log(xhr.responseText);

@@ -1,3 +1,5 @@
+<#import "/spring.ftl" as spring/>
+
 <div class="collapse<#if contact??>show</#if>" id="collapseContact">
     <div class="form-group mt-3">
         <form method="post" action="/main/${restaurant.getId()}/contact" enctype="multipart/form-data">
@@ -43,7 +45,7 @@
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary"><@spring.message "common.save"/></button>
             </div>
         </form>
     </div>

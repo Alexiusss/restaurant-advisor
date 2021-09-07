@@ -18,7 +18,7 @@ function activate(chkbox, id) {
         data: "active=" + active
     }).done(function () {
         chkbox.closest("tr").attr("data-user-active", active);
-        successNoty(active ? "User activated" : "User deactivated");
+        successNoty(active ? i18n["activated"] : i18n["deactivated"]);
     }).fail(function () {
         $(chkbox).prop("checked", !active);
     });
@@ -99,18 +99,18 @@ function save() {
     }).done(function () {
         $("#editRow").modal("hide");
         ctx.updateTable();
-        successNoty("User saved")
+        successNoty(i18n["saved"])
     })
 }
 
 function deleteUser(id) {
-    if (confirm("Are you sure you want to delete user with id " + id + "?")) {
+    if (confirm(i18n["confirmDelete"] + id + "?")) {
         $.ajax({
             url: "/user/" + id,
             type: "DELETE",
             success: function () {
                 ctx.updateTable();
-                successNoty("User with " + id + " successfully deleted!")
+                successNoty( id + i18n["deleted"])
             },
             error: function (xhr) {
                 console.log(xhr.responseText);

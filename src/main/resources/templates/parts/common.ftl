@@ -1,12 +1,13 @@
 <#macro page>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="${rc.locale.language!}">
+
     <head>
         <meta charset="UTF-8"/>
         <title>Restaurant advisor</title>
         <link rel="stylesheet" href="/static/style.css"/>
 
-        <base href="/">
+        <base href="${rc.contextPath}">
 
         <#--        https://qna.habr.com/q/618257-->
         <meta name="_csrf" content="${_csrf.token}"/>

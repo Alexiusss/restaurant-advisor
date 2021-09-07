@@ -2,22 +2,23 @@
 <script defer type="text/javascript" src="../../static/js/common.js"></script>
 <#import "parts/common.ftl" as c>
 <#import "parts/pager.ftl" as p>
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
 
-    <h3 class="text-center">List of users</h3>
+    <h3 class="text-center"><@spring.message "user.title"/></h3>
     <button class="btn btn-primary" onclick="add()">
         <span class="fa fa-plus"></span>
-        Add
+        <@spring.message "common.add"/>
     </button>
     <table class="table table-striped pb-3" id="datatable">
         <thead>
         <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Active</th>
+            <th><@spring.message "user.firstName"/></th>
+            <th><@spring.message "user.lastName"/></th>
+            <th><@spring.message "user.email"/></th>
+            <th><@spring.message "user.role"/></th>
+            <th><@spring.message "user.active"/></th>
             <th></th>
             <th></th>
         </tr>
@@ -29,7 +30,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalCenterTitle">Users editor</h4>
+                <h4 class="modal-title" id="exampleModalCenterTitle"><@spring.message "user.editorTitle"/></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -38,28 +39,28 @@
                     <input type="hidden" name="_csrf" value="${_csrf.token}">
 
                     <div class="form-group">
-                        <label for="firstName" class="col-form-label">First name</label>
+                        <label for="firstName" class="col-form-label"><@spring.message "user.firstName"/></label>
                         <input type="text" class="form-control" name="firstName" id="firstName">
                     </div>
 
                     <div class="form-group">
-                        <label for="lastName" class="col-form-label">Last name</label>
+                        <label for="lastName" class="col-form-label"><@spring.message "user.lastName"/></label>
                         <input type="text" class="form-control" name="lastName" id="lastName">
                     </div>
 
 
                     <div class="form-group">
-                        <label for="email" class="col-form-label">Email</label>
+                        <label for="email" class="col-form-label"><@spring.message "user.email"/></label>
                         <input type="text" class="form-control" name="email" id="email">
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="col-form-label">Password</label>
+                        <label for="password" class="col-form-label"><@spring.message "user.password"/></label>
                         <input type="password" class="form-control" name="password" id="password">
                     </div>
 
                     <div class="form-group">
-                        <label for="password2" class="col-form-label">Password2</label>
+                        <label for="password2" class="col-form-label"><@spring.message "user.password"/> 2</label>
                         <input type="password" class="form-control" name="password2" id="password2">
                     </div>
 
@@ -71,14 +72,15 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             <span class="fa fa-close"></span>
-                            Cancel
+                            <@spring.message "common.close"/>
                         </button>
                         <button type="button" class="btn btn-primary" onclick="save()">
                             <span class="fa fa-check"></span>
-                            Save
+                            <@spring.message "common.save"/>
                         </button>
                     </div>
             </div>
         </div>
     </div>
+    <#include "parts/i18n.ftl">
 </@c.page>

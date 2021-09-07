@@ -1,6 +1,7 @@
 <script type="text/javascript" src="../../static/js/common.js"></script>
 <#include "security.ftl">
 <#import "pager.ftl" as p>
+<#import "/spring.ftl" as spring>
 
 <#list page.content as review>
     <ul class="list-group" id="review_${review.getId()}">
@@ -35,13 +36,13 @@
                         <#if currentPageUrl == "/reviews">
                             <a class="btn btn-outline-primary"
                                href="/reviews?review=${review.getId()}">
-                                Edit
+                                <@spring.message "common.edit"/>
                             </a>
                         </#if>
                     </#if>
                     <#if currentUserId == review.getAuthor().getId() && currentPageUrl?contains("user-reviews")>
                     <button class="btn btn-outline-danger" id="deleteReview" onclick="deleteReview(${review.getId()})">
-                        Delete
+                        <@spring.message "common.delete"/>
                     </button>
                 </div>
             </div>
@@ -49,6 +50,6 @@
         </li>
     </ul>
     <#include "reviewEdit.ftl">
+    <#include "i18n.ftl">
 </#list>
-
 <@p.pager url page />
