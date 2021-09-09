@@ -1,16 +1,13 @@
 package com.example.restaurant_advisor.error;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.boot.web.error.ErrorAttributeOptions;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import lombok.ToString;
 
+@AllArgsConstructor()
 @Getter
-public class AppException extends ResponseStatusException {
-private final ErrorAttributeOptions options;
-
-    public AppException(HttpStatus status, String message, ErrorAttributeOptions options) {
-        super(status, message);
-        this.options = options;
-    }
+@ToString(callSuper = true)
+public class AppException extends RuntimeException {
+    private final ErrorType type;
+    private final String msgCode;
 }
