@@ -1,4 +1,4 @@
-const userAjaxUrl = "user/getAll";
+const userAjaxUrl = "admin/users/";
 let form;
 
 // https://stackoverflow.com/a/5064235/548473
@@ -13,7 +13,7 @@ function activate(chkbox, id) {
     let active = chkbox.is(":checked");
     //  https://stackoverflow.com/a/22213543/548473
     $.ajax({
-        url: "user/" + id,
+        url: userAjaxUrl + id,
         type: "POST",
         data: "active=" + active
     }).done(function () {
@@ -94,7 +94,7 @@ function add() {
 function save() {
     $.ajax({
         type: "POST",
-        url: "user/",
+        url: userAjaxUrl,
         data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
@@ -106,7 +106,7 @@ function save() {
 function deleteUser(id) {
     if (confirm(i18n["confirmDelete"] + id + "?")) {
         $.ajax({
-            url: "/user/" + id,
+            url: userAjaxUrl + id,
             type: "DELETE",
             success: function () {
                 ctx.updateTable();
@@ -123,7 +123,7 @@ function updateUser(id) {
     form.find(":input").val("");
     form.find("#ADMIN").prop("checked", false);
     form.find("#USER").prop("checked", false);
-    $.get("user/" + id, function (data) {
+    $.get("admin/users/" + id, function (data) {
         $.each(data, function (key, value) {
             if (key === "roles") {
                 $.each(value, function (key, value) {

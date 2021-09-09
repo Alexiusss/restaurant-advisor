@@ -19,18 +19,19 @@
             </li>
             <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user"><@spring.message "user.title"/></a>
+                    <a class="nav-link" href="/users"><@spring.message "user.title"/></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/reviews"><@spring.message "review.title"/></a>
                 </li>
             </#if>
-            <#if user??>
+            <#if name!="">
                 <li class="nav-item">
                     <a class="nav-link" href="/user/profile"><@spring.message "app.profile"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user-reviews/${currentUserId}"><@spring.message "review.usersReview"/></a>
+                    <a class="nav-link"
+                       href="/user-reviews/${currentUserId}"><@spring.message "review.usersReview"/></a>
                 </li>
             </#if>
         </ul>

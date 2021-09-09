@@ -30,6 +30,12 @@ spring:
     # https://stackoverflow.com/a/27162270
     request-context-attribute: rc
     #  https://stackoverflow.com/questions/53172123/flyway-found-non-empty-schemas-public-without-schema-history-table-use-bas
+  jackson:
+    visibility:
+      field: any
+      getter: none
+      setter: none
+      is-getter: none
   flyway:
     baseline-on-migrate: true
   mail:

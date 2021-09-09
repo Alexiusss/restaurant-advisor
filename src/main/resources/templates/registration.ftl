@@ -3,7 +3,7 @@
 <input type="hidden" value="recaptcha_tags ajax: true">
 <@c.page>
     <div class="mb-1"><@spring.message "user.addNew"/></div>
-    <form action="/registration" method="post" xmlns="http://www.w3.org/1999/html">
+    <form action="/user/registration" method="post" xmlns="http://www.w3.org/1999/html">
         <div class="form-group row">
             <label class="col-sm-2 col-form-label"><@spring.message "user.email"/>: </label>
             <div class="col-sm-6">

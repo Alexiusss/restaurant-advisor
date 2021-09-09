@@ -17,7 +17,7 @@
             </div>
         </div>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <#if !isRegisterForm><a href="/registration"><@spring.message "user.addNew"/></a></#if>
+        <#if !isRegisterForm><a href="/user/registration"><@spring.message "user.addNew"/></a></#if>
         <button class="btn btn-primary" type="submit" ><@spring.message "user.sign"/></button>
     </form>
 </#macro>
@@ -25,6 +25,6 @@
 <#macro logout >
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <button class="btn btn-primary" type="submit"><#if user??><@spring.message "app.logout"/><#else><@spring.message "app.login"/></#if></button>
+        <button class="btn btn-primary" type="submit"><#if name!=""><@spring.message "app.logout"/><#else><@spring.message "app.login"/></#if></button>
     </form>
 </#macro>
