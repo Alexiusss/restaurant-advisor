@@ -76,6 +76,7 @@ public class MvcConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
+    //https://stackoverflow.com/a/47465362
     @Bean(name = "messageSourceAccessor")
     public org.springframework.context.support.MessageSourceAccessor messageSourceAccessor() {
         return new MessageSourceAccessor( messageSource());

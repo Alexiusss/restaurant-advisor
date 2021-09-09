@@ -30,6 +30,9 @@ $(function () {
             "url": ctx.ajaxUrl,
             "dataSrc": ""
         },
+        "language": {
+            "search": i18n["search"]
+        },
         "columns": [{
             "data": "firstName"
         },
@@ -84,6 +87,9 @@ $(function () {
         }
     });
     form = $('#detailsForm');
+    $(document).ajaxError(function (event, jqXHR, options, jsExc) {
+        failNoty(jqXHR);
+    });
 })
 
 function add() {
