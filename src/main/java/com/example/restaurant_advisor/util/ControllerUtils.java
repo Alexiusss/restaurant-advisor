@@ -1,6 +1,5 @@
 package com.example.restaurant_advisor.util;
 
-import com.example.restaurant_advisor.error.NotFoundException;
 import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
@@ -49,12 +48,6 @@ public class ControllerUtils {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
         }
         return resultFileName;
-    }
-
-    public static void checkSingleModification(int count, String msg) {
-        if (count != 1) {
-            throw new NotFoundException(msg);
-        }
     }
 
     // https://stackoverflow.com/a/37771947

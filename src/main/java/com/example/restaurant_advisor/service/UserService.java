@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void activate(int id, boolean enabled) {
-        User user = userRepository.getOne(id);
+        User user = userRepository.getExisted(id);
         user.setActive(enabled);
     }
 

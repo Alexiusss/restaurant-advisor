@@ -5,19 +5,12 @@ import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
-
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM Review r WHERE r.id=:id AND r.user.id=:userId")
-    int delete(int id, int userId);
+public interface ReviewRepository extends BaseRepository<Review> {
 
     @Query("SELECT NEW com.example.restaurant_advisor.model.dto.ReviewDto( " +
             "r, " +

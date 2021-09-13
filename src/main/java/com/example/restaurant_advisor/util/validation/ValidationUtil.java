@@ -1,6 +1,8 @@
 package com.example.restaurant_advisor.util.validation;
 
 import com.example.restaurant_advisor.error.ErrorType;
+import com.example.restaurant_advisor.error.IllegalRequestDataException;
+import com.example.restaurant_advisor.error.NotFoundException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -8,6 +10,7 @@ import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @UtilityClass
 @Slf4j
@@ -32,5 +35,19 @@ public class ValidationUtil {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
         return rootCause;
+    }
+
+    public static <T> T checkNotFoundWithId(Optional<T> optional, int id) {
+        return checkNotFoundWithId(optional, "Entity with id=" + id +" not found");
+    }
+
+    public static <T> T checkNotFoundWithId(Optional<T> optional, String msg) {
+        return optional.orElseThrow(() -> new NotFoundException(msg));
+    }
+
+    public static void checkModification(int count, int id) {
+        if (count == 0) {
+            throw new IllegalRequestDataException("Entity with id=" + id + " not found");
+        }
     }
 }

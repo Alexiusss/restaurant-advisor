@@ -142,7 +142,7 @@ public class ReviewController {
 
     @DeleteMapping(value = "/user-reviews/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteReview(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
-        checkSingleModification(reviewRepository.delete(id, authUser.id()), "Review id=" + id + ", user id=" + authUser.id() + " missed");
+    public void deleteReview(@PathVariable int id) {
+        reviewRepository.deleteExisted(id);
     }
 }

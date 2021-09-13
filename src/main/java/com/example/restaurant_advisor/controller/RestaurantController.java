@@ -116,7 +116,7 @@ public class RestaurantController {
     @DeleteMapping("/main/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteRestaurant(@PathVariable int id) {
-        checkSingleModification(restaurantRepository.delete(id), "Restaurant id= " + id + " missed");
+        restaurantRepository.deleteExisted(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

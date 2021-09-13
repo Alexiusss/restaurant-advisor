@@ -13,8 +13,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.restaurant_advisor.util.ControllerUtils.checkSingleModification;
-
 @RestController
 @RequestMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController {
@@ -61,6 +59,6 @@ public class AdminController {
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable int id) {
-        checkSingleModification(userRepository.delete(id), "User id= " + id + " missed");
+        userRepository.deleteExisted(id);
     }
 }
