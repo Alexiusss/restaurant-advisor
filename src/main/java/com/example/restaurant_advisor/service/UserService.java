@@ -4,6 +4,7 @@ import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,7 @@ import static com.example.restaurant_advisor.util.validation.ValidationUtil.assu
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -29,7 +31,7 @@ public class UserService implements UserDetailsService {
     MailSender mailSender;
 
     public boolean addUser(User user) {
-
+        log.info("create {}", user);
         checkNew(user);
         user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
@@ -55,6 +57,7 @@ public class UserService implements UserDetailsService {
     public void updateUser(User user, Map<String, String> form) {
 
         assureIdConsistent(user, user.id());
+        log.info("update {} with id={}", user, user.id());
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());

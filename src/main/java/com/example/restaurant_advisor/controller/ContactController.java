@@ -4,6 +4,7 @@ import com.example.restaurant_advisor.model.Contact;
 import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.Map;
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 
 @Controller
+@Slf4j
 public class ContactController {
 
     @Autowired
@@ -38,6 +40,7 @@ public class ContactController {
             model.addAttribute("restaurant", restaurant);
             return "restaurant";
         } else {
+            log.info("{} contact {}", contact.isNew()? "add":"edit", contact);
             // https://stackoverflow.com/a/11105886
             contact.setRestaurant(restaurantRepository.findById(id).orElseThrow());
 

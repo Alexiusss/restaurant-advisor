@@ -5,9 +5,9 @@ import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.CaptchaResponseDto;
 import com.example.restaurant_advisor.repository.UserRepository;
 import com.example.restaurant_advisor.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +24,7 @@ import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 
 @Controller
 @RequestMapping("user/")
+@Slf4j
 public class UserController {
     private final static String CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
@@ -74,6 +75,7 @@ public class UserController {
 
     @GetMapping("activate/{code}")
     public String activate(Model model, @PathVariable String code) {
+        log.info("user activation with code {}", code);
         boolean isActivated = userService.activateUser(code);
 
         if (isActivated) {
@@ -89,6 +91,7 @@ public class UserController {
 
     @GetMapping("profile")
     public String getProfile(Model model, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("get profile for user {}", authUser.getUser());
         model.addAttribute("email", authUser.getUser().getEmail());
         model.addAttribute("firstName", authUser.getUser().getFirstName());
         model.addAttribute("lastName", authUser.getUser().getLastName());
@@ -110,6 +113,7 @@ public class UserController {
             user.setPassword(password);
         }
 
+        log.info("update profile for user {}", user);
         userService.prepareAndSave(user);
         return "redirect:/user/profile";
     }
@@ -118,6 +122,7 @@ public class UserController {
     public String subscribe(@AuthenticationPrincipal AuthUser currentUser,
                             @PathVariable int userId) {
         User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        log.info("user {} subscribe to user {}", currentUser, user);
         userService.subscribe(currentUser, user);
 
         return "redirect:/user-reviews/" + user.getId();
@@ -127,6 +132,7 @@ public class UserController {
     public String unsubscribe(@AuthenticationPrincipal AuthUser currentUser,
                               @PathVariable int userId) {
         User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        log.info("user {} unsubscribe to user {}", currentUser, user);
         userService.unsubscribe(currentUser, user);
 
         return "redirect:/user-reviews/" + user.getId();
@@ -143,8 +149,10 @@ public class UserController {
         model.addAttribute("type", type);
 
         if ("subscriptions".equals(type)) {
+            log.info("get subscriptions list for user {}", userId);
             model.addAttribute("users", user.getSubscriptions());
         } else {
+            log.info("get subscribers list for user {}", userId);
             model.addAttribute("users", user.getSubscribers());
         }
 

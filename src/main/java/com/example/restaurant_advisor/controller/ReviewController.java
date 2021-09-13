@@ -7,6 +7,7 @@ import com.example.restaurant_advisor.model.dto.ReviewDto;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import com.example.restaurant_advisor.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ import static com.example.restaurant_advisor.util.validation.ValidationUtil.assu
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
 @Controller
+@Slf4j
 public class ReviewController {
     @Autowired
     ReviewRepository reviewRepository;
@@ -51,6 +53,7 @@ public class ReviewController {
                               @PathVariable int userId, Model model,
                               @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        log.info("get reviews for user {}", userId);
         User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
         Page<ReviewDto> page = createPageFromList(pageable, createListReviewTos(user.getReviews(), currentUser.getUser()));
 
@@ -70,6 +73,7 @@ public class ReviewController {
     public String getAllReviews(Model model, @RequestParam(required = false) Review review,
                                 @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
                                 @AuthenticationPrincipal AuthUser user) {
+        log.info("get all reviews");
         Page<ReviewDto> page = reviewRepository.getAllReviews(pageable, user.getUser());
 
         model.addAttribute("page", page);
@@ -91,8 +95,10 @@ public class ReviewController {
         Set<User> likes = review.getLikes();
 
         if (likes.contains(currentUser.getUser())) {
+            log.info("unlike for review {}", reviewId);
             likes.remove(currentUser.getUser());
         } else {
+            log.info("like for review {}", reviewId);
             likes.add(currentUser.getUser());
         }
     }
@@ -108,6 +114,7 @@ public class ReviewController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("review", review);
         } else {
+            log.info("add review {} for restaurant {} from user {}", review, id, authUser.getUser());
             checkNew(review);
             review.setDate(LocalDate.now());
             review.setUser(authUser.getUser());
@@ -128,6 +135,7 @@ public class ReviewController {
             @RequestParam(value = "active", required = false) boolean active
     ) {
 
+        log.info("update review {}", review.id());
         assureIdConsistent(review, review.id());
 
         if (!ObjectUtils.isEmpty(title)) {
@@ -148,6 +156,7 @@ public class ReviewController {
     @DeleteMapping(value = "/user-reviews/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteReview(@PathVariable int id) {
+        log.info("delete review {}", id);
         reviewRepository.deleteExisted(id);
     }
 }

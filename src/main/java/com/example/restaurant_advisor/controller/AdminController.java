@@ -3,6 +3,7 @@ package com.example.restaurant_advisor.controller;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
 import com.example.restaurant_advisor.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class AdminController {
 
     @Autowired
@@ -26,6 +28,7 @@ public class AdminController {
     @GetMapping
     @ResponseBody
     public List<User> getAll() {
+        log.info("getAll");
         return userRepository.findAll();
     }
 
@@ -33,6 +36,7 @@ public class AdminController {
     @GetMapping(value = "/{id}")
     @ResponseBody
     public User getUser(@PathVariable int id) {
+        log.info("getById {}", id);
         return userRepository.findById(id).orElse(null);
     }
 
@@ -52,6 +56,7 @@ public class AdminController {
     @PostMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void activate(@PathVariable int id, @RequestParam boolean active) {
+        log.info(active ? "active {}" : "dormant {}", id);
         userService.activate(id, active);
     }
 
@@ -59,6 +64,7 @@ public class AdminController {
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable int id) {
+        log.info("delete {}", id);
         userRepository.deleteExisted(id);
     }
 }

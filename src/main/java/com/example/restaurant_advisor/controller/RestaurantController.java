@@ -8,6 +8,7 @@ import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import com.example.restaurant_advisor.service.RestaurantService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ import static com.example.restaurant_advisor.util.ControllerUtils.*;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
 @Controller
+@Slf4j
 public class RestaurantController {
 
     @Autowired
@@ -58,6 +60,7 @@ public class RestaurantController {
                       @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
                       @AuthenticationPrincipal AuthUser authUser) {
 
+        log.info("get restaurant {}", id);
         Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
 
         List<ReviewDto> reviews = null;
@@ -87,6 +90,7 @@ public class RestaurantController {
                        Model model,
                        @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        log.info("get restaurant list");
         Page<RestaurantDto> page = restaurantService.restaurantList(pageable, filter, cuisine);
 
         model.addAttribute("page", page);
@@ -106,6 +110,7 @@ public class RestaurantController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("restaurant", restaurant);
         } else {
+            log.info("create restaurant {}", restaurant);
             checkNew(restaurant);
             restaurant.setFilename(saveFile(file, uploadPath));
             model.addAttribute("restaurant", null);
@@ -118,6 +123,7 @@ public class RestaurantController {
     @DeleteMapping("/main/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteRestaurant(@PathVariable int id) {
+        log.info("delete restaurant {}", id);
         restaurantRepository.deleteExisted(id);
     }
 
@@ -128,6 +134,7 @@ public class RestaurantController {
                                    @RequestParam("cuisine") String cuisine,
                                    @RequestParam("file") MultipartFile file) throws IOException {
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow();
+        log.info("update restaurant {}", id);
         if (!ObjectUtils.isEmpty(name)) {
             restaurant.setName(name);
         }

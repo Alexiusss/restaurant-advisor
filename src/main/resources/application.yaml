@@ -52,6 +52,13 @@ spring:
       initialize-schema: always
       table-name: SPRING_SESSION
 
+logging:
+  level:
+    root: WARN
+    com.example.restaurant_advisor: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
+
+
 upload.path: /c:/workspace/project/restaurant_advisor/uploads/
 recaptcha.secret: 6Ldosm0bAAAAAJCXZgVkciv2zai6rT1hEMybmJo_
 server.servlet:
