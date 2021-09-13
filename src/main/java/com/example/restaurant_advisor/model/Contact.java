@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.model;
 
+import com.example.restaurant_advisor.HasId;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"restaurant"})
-public class Contact {
+public class Contact implements HasId {
 
     // https://www.baeldung.com/jpa-one-to-one
     @Id

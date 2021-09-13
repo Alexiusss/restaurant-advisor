@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.model;
 
+import com.example.restaurant_advisor.HasIdAndEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -24,7 +25,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper = true, exclude = {"password", "reviews", "subscribers", "subscriptions"})
-public class User extends BaseEntity {
+public class User extends BaseEntity implements HasIdAndEmail {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email(message = "Email is not correct")

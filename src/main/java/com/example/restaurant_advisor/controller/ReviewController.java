@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.assureIdConsistent;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
 @Controller
 public class ReviewController {
@@ -106,6 +108,7 @@ public class ReviewController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("review", review);
         } else {
+            checkNew(review);
             review.setDate(LocalDate.now());
             review.setUser(authUser.getUser());
             review.setRestaurant(restaurantRepository.getOne(id));
@@ -124,6 +127,8 @@ public class ReviewController {
             @RequestParam("comment") String comment,
             @RequestParam(value = "active", required = false) boolean active
     ) {
+
+        assureIdConsistent(review, review.id());
 
         if (!ObjectUtils.isEmpty(title)) {
             review.setTitle(title);

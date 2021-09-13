@@ -16,6 +16,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.assureIdConsistent;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,11 +29,8 @@ public class UserService implements UserDetailsService {
     MailSender mailSender;
 
     public boolean addUser(User user) {
-        Optional<User> userFromDb = userRepository.findByEmailIgnoreCase(user.getEmail().toLowerCase());
 
-        if (userFromDb.isPresent()) {
-            return false;
-        }
+        checkNew(user);
         user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
@@ -54,6 +53,8 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void updateUser(User user, Map<String, String> form) {
+
+        assureIdConsistent(user, user.id());
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());

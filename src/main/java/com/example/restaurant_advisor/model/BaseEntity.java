@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.model;
 
+import com.example.restaurant_advisor.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public abstract class BaseEntity implements Persistable<Integer>, Serializable {
+public abstract class BaseEntity implements Persistable<Integer>, Serializable, HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.util.validation;
 
+import com.example.restaurant_advisor.HasId;
 import com.example.restaurant_advisor.error.ErrorType;
 import com.example.restaurant_advisor.error.IllegalRequestDataException;
 import com.example.restaurant_advisor.error.NotFoundException;
@@ -35,6 +36,21 @@ public class ValidationUtil {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
         return rootCause;
+    }
+
+    public static void checkNew(HasId bean) {
+        if (!bean.isNew()) {
+            throw new IllegalRequestDataException(bean.getClass().getSimpleName() + " must be new (id=null)");
+        }
+    }
+
+    // http://stackoverflow.com/a/32728226/548473
+    public static void assureIdConsistent(HasId bean, int id) {
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.id() != id) {
+            throw new IllegalRequestDataException(bean.getClass().getSimpleName() + " must has id=" + id);
+        }
     }
 
     public static <T> T checkNotFoundWithId(Optional<T> optional, int id) {

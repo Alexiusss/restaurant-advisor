@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
 @Controller
 public class RestaurantController {
@@ -105,6 +106,7 @@ public class RestaurantController {
             model.mergeAttributes(errorsMap);
             model.addAttribute("restaurant", restaurant);
         } else {
+            checkNew(restaurant);
             restaurant.setFilename(saveFile(file, uploadPath));
             model.addAttribute("restaurant", null);
             restaurantRepository.save(restaurant);
