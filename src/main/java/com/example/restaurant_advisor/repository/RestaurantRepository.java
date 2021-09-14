@@ -27,7 +27,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
             "AVG (rr.rating)" +
             ")" +
             "FROM Restaurant r " +
-            "JOIN r.reviews rr on rr.active=true " +
+            "LEFT OUTER JOIN r.reviews rr on rr.active=true " +
             "GROUP BY r.id")
     List<RestaurantDto> getAll();
 
@@ -36,6 +36,6 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
             "LEFT OUTER JOIN FETCH r.contact c " +
             "LEFT OUTER JOIN FETCH rr.user ru " +
             "LEFT OUTER JOIN FETCH rr.likes rl " +
-            "WHERE r.id=?1 AND rr.active=true")
+            "WHERE r.id=?1")
     Optional<Restaurant> getWithReviewsAndContact(int id);
 }

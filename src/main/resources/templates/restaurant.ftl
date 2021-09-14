@@ -106,5 +106,5 @@
 </@c.page>
 
 <script>
-    $(".rateyo").rateYo();
+     setTimeout(function(){$(".rateyo").rateYo()}, 10)
 </script>

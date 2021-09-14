@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
@@ -67,7 +68,10 @@ public class RestaurantController {
         Page<ReviewDto> page = null;
         Map<Integer, Integer> ratings = new HashMap<>();
         if (restaurant.getReviews() != null) {
-            reviews = createListReviewTos(restaurant.getReviews(), authUser.getUser());
+            reviews = createListReviewTos(restaurant.getReviews(), authUser.getUser())
+                    .stream()
+                    .filter(ReviewDto::isActive)
+                    .collect(Collectors.toList());
             // https://stackoverflow.com/a/51541841
             reviews.forEach(s -> ratings.merge(s.getRating(), 1, Math::addExact));
             page = createPageFromList(pageable, reviews);

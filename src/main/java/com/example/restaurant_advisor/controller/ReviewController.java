@@ -26,14 +26,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.assureIdConsistent;
@@ -48,9 +46,6 @@ public class ReviewController {
     RestaurantRepository restaurantRepository;
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    EntityManager em;
 
     @Value("${upload.path}")
     private String uploadPath;
