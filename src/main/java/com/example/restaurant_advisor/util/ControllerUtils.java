@@ -59,7 +59,6 @@ public class ControllerUtils {
 
     public static List<ReviewDto> createListReviewTos(Set<Review> reviews, User currentUser) {
         return reviews.stream()
-                .filter(review -> review.getUser().equals(currentUser) || review.isActive())
                 .map(review ->
                         new ReviewDto(review, (long) review.getLikes().size(),
                                 review.getLikes().stream()
@@ -73,5 +72,9 @@ public class ControllerUtils {
                 .filter(ReviewDto::isActive)
                 .mapToDouble(ReviewDto::getRating)
                 .average().orElse(0);
+    }
+
+    public static Set<Review> getActiveReviews(Set<Review> reviews) {
+        return reviews.stream().filter(Review::isActive).collect(Collectors.toSet());
     }
 }

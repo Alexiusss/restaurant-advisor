@@ -2,6 +2,7 @@ package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Review;
+import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
@@ -25,11 +26,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.*;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.assureIdConsistent;
@@ -45,6 +49,9 @@ public class ReviewController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EntityManager em;
+
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -54,8 +61,15 @@ public class ReviewController {
                               @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         log.info("get reviews for user {}", userId);
+
         User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
-        Page<ReviewDto> page = createPageFromList(pageable, createListReviewTos(user.getReviews(), currentUser.getUser()));
+        Set<Review> reviews = user.getReviews();
+
+        if(!currentUser.getUser().getRoles().contains(Role.ADMIN) && currentUser.getUser().id()!=userId){
+            reviews = getActiveReviews(reviews);
+        }
+
+        Page<ReviewDto> page = createPageFromList(pageable, createListReviewTos(reviews, currentUser.getUser()));
 
         model.addAttribute("userChannel", user);
         model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
@@ -74,9 +88,8 @@ public class ReviewController {
                                 @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
                                 @AuthenticationPrincipal AuthUser user) {
         log.info("get all reviews");
-        Page<ReviewDto> page = reviewRepository.getAllReviews(pageable, user.getUser());
-
-        model.addAttribute("page", page);
+        List<ReviewDto> reviewsDto =  createListReviewTos(reviewRepository.getAll(), user.getUser());
+        model.addAttribute("page", createPageFromList(pageable, reviewsDto));
         model.addAttribute("url", "/reviews");
         model.addAttribute("reviewEdit", review);
 
