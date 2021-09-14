@@ -13,11 +13,11 @@ public class RestaurantDto extends BaseTo {
     String filename;
     Double rating;
 
-    public RestaurantDto(Restaurant restaurant, Double rating) {
-        super(restaurant.id());
-        this.name = restaurant.getName();
-        this.cuisine = restaurant.getCuisine();
-        this.filename = restaurant.getFilename();
+    public RestaurantDto(Integer id, String name, String cuisine, String filename, Double rating) {
+        super(id);
+        this.name = name;
+        this.cuisine = cuisine;
+        this.filename = filename;
         this.rating = rating == null ? 0 : rating;
     }
 
