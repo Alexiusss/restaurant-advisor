@@ -95,15 +95,17 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void subscribe(AuthUser currentUser, User user) {
+    public void subscribe(AuthUser currentUser, int userId) {
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        log.info("user {} subscribe to user {}", currentUser, user);
         user.getSubscribers().add(currentUser.getUser());
-        userRepository.save(user);
     }
 
     @Transactional
-    public void unsubscribe(AuthUser currentUser, User user) {
+    public void unsubscribe(AuthUser currentUser, int userId) {
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        log.info("user {} unsubscribe to user {}", currentUser, user);
         user.getSubscribers().remove(currentUser.getUser());
-        userRepository.save(user);
     }
 
     @Transactional

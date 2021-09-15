@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +30,7 @@ public class AdminController {
     @ResponseBody
     public List<User> getAll() {
         log.info("getAll");
-        return userRepository.findAll();
+        return Optional.of(userRepository.findAll()).orElse(null);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

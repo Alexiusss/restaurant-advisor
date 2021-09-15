@@ -121,21 +121,15 @@ public class UserController {
     @GetMapping("subscribe/{userId}")
     public String subscribe(@AuthenticationPrincipal AuthUser currentUser,
                             @PathVariable int userId) {
-        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
-        log.info("user {} subscribe to user {}", currentUser, user);
-        userService.subscribe(currentUser, user);
-
-        return "redirect:/user-reviews/" + user.getId();
+        userService.subscribe(currentUser, userId);
+        return "redirect:/user-reviews/" + userId;
     }
 
     @GetMapping("unsubscribe/{userId}")
     public String unsubscribe(@AuthenticationPrincipal AuthUser currentUser,
                               @PathVariable int userId) {
-        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
-        log.info("user {} unsubscribe to user {}", currentUser, user);
-        userService.unsubscribe(currentUser, user);
-
-        return "redirect:/user-reviews/" + user.getId();
+        userService.unsubscribe(currentUser, userId);
+        return "redirect:/user-reviews/" + userId;
     }
 
     @GetMapping("{type}/{userId}/list")
