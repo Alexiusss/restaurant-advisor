@@ -11,6 +11,9 @@ import com.example.restaurant_advisor.service.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,6 +40,7 @@ import static com.example.restaurant_advisor.util.validation.ValidationUtil.chec
 
 @Controller
 @Slf4j
+@CacheConfig(cacheNames = "restaurants")
 public class RestaurantController {
 
     @Autowired
@@ -106,6 +110,7 @@ public class RestaurantController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/main")
+    @CacheEvict(allEntries = true)
     public String add(@Valid Restaurant restaurant, BindingResult bindingResult,
                       Model model, @RequestParam("file") MultipartFile file) throws IOException {
 
@@ -126,6 +131,7 @@ public class RestaurantController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/main/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void deleteRestaurant(@PathVariable int id) {
         log.info("delete restaurant {}", id);
         restaurantRepository.deleteExisted(id);
@@ -133,6 +139,7 @@ public class RestaurantController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/main/{id}")
+    @CacheEvict(allEntries = true)
     public String updateRestaurant(@PathVariable int id,
                                    @RequestParam("name") String name,
                                    @RequestParam("cuisine") String cuisine,

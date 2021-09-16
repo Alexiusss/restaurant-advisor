@@ -1,6 +1,7 @@
 package com.example.restaurant_advisor.repository;
 
 import com.example.restaurant_advisor.model.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,7 @@ public interface UserRepository  extends BaseRepository<User> {
     @EntityGraph(attributePaths = {"roles"})
     List<User> findAll();
 
+    @Cacheable("users")
     Optional<User> findByEmailIgnoreCase(String email);
 
     User findByActivationCode(String code);

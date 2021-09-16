@@ -31,6 +31,8 @@ spring:
     jdbc:
       initialize-schema: always
       table-name: SPRING_SESSION
+  cache:
+    type: none
 
 upload.path: /c:/workspace/project/restaurant_advisor/uploads/
 recaptcha.secret: 6Ldosm0bAAAAAJCXZgVkciv2zai6rT1hEMybmJo_

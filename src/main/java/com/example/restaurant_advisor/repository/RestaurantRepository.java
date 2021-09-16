@@ -2,6 +2,7 @@ package com.example.restaurant_advisor.repository;
 
 import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.model.dto.RestaurantDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,5 +38,6 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
             "LEFT OUTER JOIN FETCH rr.user ru " +
             "LEFT OUTER JOIN FETCH rr.likes rl " +
             "WHERE r.id=?1")
+    @Cacheable("restaurants")
     Optional<Restaurant> getWithReviewsAndContact(int id);
 }

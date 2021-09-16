@@ -8,6 +8,9 @@ import com.example.restaurant_advisor.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +28,7 @@ import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 @Controller
 @RequestMapping("user/")
 @Slf4j
+@CacheConfig(cacheNames = "users")
 public class UserController {
     private final static String CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
@@ -74,6 +78,7 @@ public class UserController {
     }
 
     @GetMapping("activate/{code}")
+    @CacheEvict(allEntries = true)
     public String activate(Model model, @PathVariable String code) {
         log.info("user activation with code {}", code);
         boolean isActivated = userService.activateUser(code);
@@ -99,6 +104,7 @@ public class UserController {
     }
 
     @PostMapping("profile")
+    @CacheEvict(allEntries = true)
     public String updateProfile(
             @AuthenticationPrincipal AuthUser authUser,
             @RequestParam String firstName,

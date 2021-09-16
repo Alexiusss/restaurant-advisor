@@ -11,6 +11,7 @@ import com.example.restaurant_advisor.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -95,6 +96,7 @@ public class ReviewController {
     @Transactional
     @GetMapping(value = "/reviews/{reviewId}/like")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void like(
             @AuthenticationPrincipal AuthUser currentUser,
             @PathVariable int reviewId
@@ -113,6 +115,7 @@ public class ReviewController {
 
     @PostMapping(value = "/main/{id}/review")
     // https://stackoverflow.com/a/58317766
+    @CacheEvict(value = "restaurants", allEntries = true)
     public String addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
                             BindingResult bindingResult, Model model,
                             @PathVariable int id, @RequestParam("photo") MultipartFile photo) throws IOException {
@@ -136,6 +139,7 @@ public class ReviewController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/reviews")
+    @CacheEvict(value = "restaurants", allEntries = true)
     public String updateReview(
             @RequestParam(value = "id") Review review,
             @RequestParam("title") String title,
@@ -163,6 +167,7 @@ public class ReviewController {
 
     @DeleteMapping(value = "/user-reviews/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void deleteReview(@PathVariable int id) {
         log.info("delete review {}", id);
         reviewRepository.deleteExisted(id);

@@ -36,6 +36,10 @@ spring:
       getter: none
       setter: none
       is-getter: none
+    # https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-cache
+  cache:
+    cache-names: users, restaurants
+    caffeine.spec: maximumSize=1,expireAfterAccess=60s
   flyway:
     baseline-on-migrate: true
   mail:

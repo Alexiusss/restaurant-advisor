@@ -6,6 +6,7 @@ import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ public class ContactController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/main/{id}/contact")
+    @CacheEvict(value = "restaurants", allEntries = true)
     public String addContact(@Valid Contact contact, BindingResult bindingResult,
                              Model model, @PathVariable int id) {
 

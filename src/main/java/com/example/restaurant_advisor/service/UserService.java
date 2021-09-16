@@ -6,6 +6,7 @@ import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     MailSender mailSender;
 
+    @CachePut(value = "users", key = "#user.email")
     public boolean addUser(User user) {
         log.info("create {}", user);
         checkNew(user);
@@ -54,6 +56,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    @CachePut(value = "users", key = "#user.email")
     public void updateUser(User user, Map<String, String> form) {
 
         assureIdConsistent(user, user.id());

@@ -5,6 +5,9 @@ import com.example.restaurant_advisor.repository.UserRepository;
 import com.example.restaurant_advisor.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@CacheConfig(cacheNames = "users")
 public class AdminController {
 
     @Autowired
@@ -28,6 +32,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     @ResponseBody
+    @Cacheable
     public List<User> getAll() {
         log.info("getAll");
         return Optional.of(userRepository.findAll()).orElse(null);
@@ -56,6 +61,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void activate(@PathVariable int id, @RequestParam boolean active) {
         log.info(active ? "active {}" : "dormant {}", id);
         userService.activate(id, active);
@@ -64,6 +70,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void deleteUser(@PathVariable int id) {
         log.info("delete {}", id);
         userRepository.deleteExisted(id);
