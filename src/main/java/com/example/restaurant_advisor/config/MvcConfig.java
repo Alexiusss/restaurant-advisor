@@ -1,6 +1,9 @@
 package com.example.restaurant_advisor.config;
 
+import com.example.restaurant_advisor.util.JsonUtil;
 import com.example.restaurant_advisor.util.RedirectInterceptor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
@@ -18,6 +21,9 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.util.Locale;
+
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 @Configuration
 @EnableCaching
@@ -82,5 +88,15 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean(name = "messageSourceAccessor")
     public org.springframework.context.support.MessageSourceAccessor messageSourceAccessor() {
         return new MessageSourceAccessor( messageSource());
+    }
+
+    @Bean
+    protected Module module() {
+        return new Hibernate5Module();
+    }
+
+    @Autowired
+    public void storeObjectMapper(ObjectMapper objectMapper) {
+        JsonUtil.setMapper(objectMapper);
     }
 }

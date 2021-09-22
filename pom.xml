@@ -93,6 +93,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!--        jackson-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
+        </dependency>
+
         <!--Webjars-->
         <dependency>
             <groupId>org.webjars.bower</groupId>
