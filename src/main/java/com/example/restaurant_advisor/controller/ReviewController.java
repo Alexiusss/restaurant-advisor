@@ -2,94 +2,47 @@ package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.AuthUser;
 import com.example.restaurant_advisor.model.Review;
-import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
-import com.example.restaurant_advisor.model.dto.ReviewDto;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
-import com.example.restaurant_advisor.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import static com.example.restaurant_advisor.util.ControllerUtils.*;
-import static com.example.restaurant_advisor.util.validation.ValidationUtil.assureIdConsistent;
+import static com.example.restaurant_advisor.util.ControllerUtils.saveFile;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
 
-@Controller
+@RestController
+@RequestMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class ReviewController {
     @Autowired
     ReviewRepository reviewRepository;
     @Autowired
     RestaurantRepository restaurantRepository;
-    @Autowired
-    UserRepository userRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
 
-    @GetMapping(value = "/user-reviews/{userId}")
-    public String userReviews(@AuthenticationPrincipal AuthUser currentUser,
-                              @PathVariable int userId, Model model,
-                              @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-
-        log.info("get reviews for user {}", userId);
-
-        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
-        Set<Review> reviews = user.getReviews();
-
-        if(!currentUser.getUser().getRoles().contains(Role.ADMIN) && currentUser.getUser().id()!=userId){
-            reviews = getActiveReviews(reviews);
-        }
-
-        Page<ReviewDto> page = createPageFromList(pageable, createListReviewTos(reviews, currentUser.getUser()));
-
-        model.addAttribute("userChannel", user);
-        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
-        model.addAttribute("subscribersCount", user.getSubscribers().size());
-        model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser.getUser()));
-        model.addAttribute("page", page);
-        model.addAttribute("url", "/user-reviews/" + currentUser.id());
-        model.addAttribute("isCurrentUser", currentUser.getUser().equals(user));
-
-        return "userReviews";
-    }
-
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping(value = "/reviews")
-    public String getAllReviews(Model model, @RequestParam(required = false) Review review,
-                                @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                @AuthenticationPrincipal AuthUser user) {
-        log.info("get all reviews");
-        List<ReviewDto> reviewsDto =  createListReviewTos(reviewRepository.getAll(), user.getUser());
-        model.addAttribute("page", createPageFromList(pageable, reviewsDto));
-        model.addAttribute("url", "/reviews");
-        model.addAttribute("reviewEdit", review);
-
-        return "reviews";
+    @GetMapping(value = "/reviews/{id}")
+    public Review getReview(@PathVariable int id) {
+        log.info("getById {}", id);
+        return reviewRepository.findById(id).orElse(null);
     }
 
     //  https://stackoverflow.com/a/38733234
@@ -100,7 +53,7 @@ public class ReviewController {
     public void like(
             @AuthenticationPrincipal AuthUser currentUser,
             @PathVariable int reviewId
-    ){
+    ) {
         Review review = reviewRepository.getWithLikesAndUser(reviewId);
         Set<User> likes = review.getLikes();
 
@@ -113,42 +66,35 @@ public class ReviewController {
         }
     }
 
-    @PostMapping(value = "/main/{id}/review")
+    @PostMapping(value = "/reviews/{id}")
     // https://stackoverflow.com/a/58317766
     @CacheEvict(value = "restaurants", allEntries = true)
-    public String addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
-                            BindingResult bindingResult, Model model,
-                            @PathVariable int id, @RequestParam("photo") MultipartFile photo) throws IOException {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorsMap = getErrors(bindingResult);
-            model.mergeAttributes(errorsMap);
-            model.addAttribute("review", review);
-        } else {
-            log.info("add review {} for restaurant {} from user {}", review, id, authUser.getUser());
-            checkNew(review);
-            review.setDate(LocalDate.now());
-            review.setUser(authUser.getUser());
-            review.setRestaurant(restaurantRepository.getOne(id));
-            review.setFilename(saveFile(photo, uploadPath));
-            model.addAttribute("review", null);
-            reviewRepository.save(review);
-        }
-        return "redirect:/main/" + id;
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
+                          @PathVariable int id,
+                          @RequestParam(value = "photo") MultipartFile photo) throws IOException {
+        log.info("add review {} for restaurant {} from user {}", review, id, authUser.getUser());
+        checkNew(review);
+        review.setDate(LocalDate.now());
+        review.setUser(authUser.getUser());
+        review.setRestaurant(restaurantRepository.getExisted(id));
+        review.setFilename(saveFile(photo, uploadPath));
+        reviewRepository.save(review);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/reviews")
     @CacheEvict(value = "restaurants", allEntries = true)
-    public String updateReview(
-            @RequestParam(value = "id") Review review,
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void updateReview(
+            @RequestParam(value = "id") int id,
             @RequestParam("title") String title,
             @RequestParam("comment") String comment,
-            @RequestParam(value = "active", required = false) boolean active
+            @RequestParam(value = "active") boolean active
     ) {
 
-        log.info("update review {}", review.id());
-        assureIdConsistent(review, review.id());
+        log.info("update review {}", id);
+        Review review = reviewRepository.getExisted(id);
 
         if (!ObjectUtils.isEmpty(title)) {
             review.setTitle(title);
@@ -161,8 +107,6 @@ public class ReviewController {
         review.setActive(active);
 
         reviewRepository.save(review);
-
-        return "redirect:/reviews";
     }
 
     @DeleteMapping(value = "/user-reviews/{id}")

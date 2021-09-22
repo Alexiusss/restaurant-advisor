@@ -1,22 +1,28 @@
 package com.example.restaurant_advisor.service;
 
 import com.example.restaurant_advisor.AuthUser;
+import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;
+import com.example.restaurant_advisor.model.dto.ReviewDto;
 import com.example.restaurant_advisor.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.restaurant_advisor.util.ControllerUtils.*;
 import static com.example.restaurant_advisor.util.UserUtil.prepareToSave;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.assureIdConsistent;
 import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkNew;
@@ -119,5 +125,26 @@ public class UserService implements UserDetailsService {
 
     public void prepareAndSave(User user) {
         userRepository.save(prepareToSave(user));
+    }
+
+    public void getUserReviews(int userId, AuthUser currentUser, Model model, Pageable pageable) {
+
+        User user = userRepository.getWithReviewsAndSubscriptionsAndSubscribers(userId).orElseThrow();
+        Set<Review> reviews = user.getReviews();
+
+        if (!currentUser.getUser().getRoles().contains(Role.ADMIN) && currentUser.getUser().id() != userId) {
+            reviews = getActiveReviews(reviews);
+        }
+
+        Page<ReviewDto> page = createPageFromList(pageable, createListReviewTos(reviews, currentUser.getUser()));
+
+        model.addAttribute("userChannel", user);
+        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
+        model.addAttribute("subscribersCount", user.getSubscribers().size());
+        model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser.getUser()));
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/user-reviews/" + currentUser.id());
+        model.addAttribute("isCurrentUser", currentUser.getUser().equals(user));
+
     }
 }

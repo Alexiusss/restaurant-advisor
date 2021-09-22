@@ -31,7 +31,6 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    @ResponseBody
     @Cacheable
     public List<User> getAll() {
         log.info("getAll");
@@ -40,7 +39,6 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/{id}")
-    @ResponseBody
     public User getUser(@PathVariable int id) {
         log.info("getById {}", id);
         return userRepository.findById(id).orElse(null);
