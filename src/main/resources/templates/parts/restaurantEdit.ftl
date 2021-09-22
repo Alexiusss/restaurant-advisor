@@ -30,7 +30,7 @@
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
             <div class="form-group">
-                <button type="submit" class="btn btn-primary"><@spring.message "common.save"/></button>
+                <button type="submit" class="btn btn-outline-primary ml-2 btn-sm"><@spring.message "common.save"/></button>
             </div>
         </form>
     </div>

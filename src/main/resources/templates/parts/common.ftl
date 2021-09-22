@@ -22,10 +22,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
               integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
               crossorigin="anonymous"/>
-        <link rel="stylesheet" href="webjars/datatables/1.10.20/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="${rc.contextPath}/webjars/datatables/1.10.20/css/dataTables.bootstrap4.min.css">
 
-        <link rel="stylesheet" href="webjars/noty/3.1.4/demo/font-awesome/css/font-awesome.min.css">
-        <link rel="stylesheet" href="webjars/noty/3.1.4/lib/noty.css"/>
+        <link rel="stylesheet" href="${rc.contextPath}/webjars/noty/3.1.4/demo/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="${rc.contextPath}/webjars/noty/3.1.4/lib/noty.css"/>
 
         <script src="https://www.google.com/recaptcha/api.js"></script>
 
@@ -45,26 +45,16 @@
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
                 integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
                 crossorigin="anonymous"></script>
-        <script defer type="text/javascript" src="webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
-        <script defer type="text/javascript" src="webjars/datatables/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+        <script defer type="text/javascript" src="${rc.contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script defer type="text/javascript" src="${rc.contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 
-        <script defer type="text/javascript" src="webjars/noty/3.1.4/lib/noty.min.js"></script>
+        <script defer type="text/javascript" src="${rc.contextPath}/webjars/noty/3.1.4/lib/noty.min.js"></script>
     </head>
     <body>
     <#include "navbar.ftl">
     <div class="container mt-5">
         <#nested>
     </div>
-
-    <#if review?? || reviewEdit??>
-        <script>
-            // https://github.com/twbs/bootstrap/issues/3902#issuecomment-17786002
-            setTimeout(function () {
-                $('#exampleModalCenter').modal('show')
-            }, 10)
-        </script>
-    </#if>
-    </body>
 
     <script>
         $.ajaxSetup({

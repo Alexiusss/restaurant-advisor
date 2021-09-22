@@ -18,7 +18,7 @@
 
                 <div class="text-right">
                     <#if isAdmin>
-                        <a class="btn btn-outline-primary" data-toggle="collapse" href="#collapseRestaurant"
+                        <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseRestaurant"
                            role="button" aria-expanded="false"
                            aria-controls="collapseRestaurant">
                             <@spring.message "common.edit"/>
@@ -41,7 +41,7 @@
                                 <p class="card-text">${restaurant.contact.getEmail()}</p>
                             </#if>
                             <#if isAdmin>
-                                <a class="btn btn-outline-primary" data-toggle="collapse" href="#collapseContact"
+                                <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseContact"
                                    role="button"
                                    aria-expanded="false"
                                    aria-controls="collapseContact">
@@ -52,7 +52,7 @@
                             <p class="card-text"><small class="text-muted"><@spring.message "contact.noData"/></small></p>
 
                             <#if isAdmin>
-                                <a class="btn btn-primary" data-toggle="collapse" href="#collapseContact" role="button"
+                                <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseContact" role="button"
                                    aria-expanded="false"
                                    aria-controls="collapseExample">
                                     <@spring.message "contact.add"/>
@@ -79,9 +79,9 @@
 
     <#if isAdmin>
         <#include "parts/restaurantEdit.ftl"/>
-
         <#include "parts/contactEdit.ftl"/>
     </#if>
+
     <div class="mx-auto" style="width: 200px;">
         Centered element
     </div>
@@ -91,18 +91,16 @@
         <a class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1"><@spring.message "review.title"/> </h5>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                <button class="btn btn-outline-primary ml-2 btn-sm" onclick="addReview()">
+                    <span class="fa"></span>
                     <@spring.message "review.write"/>
                 </button>
             </div>
         </a>
 
-        <#include "parts/reviewEdit.ftl"/>
-
         <#include "parts/reviewList.ftl" />
-
-
     </div>
+
 </@c.page>
 
 <script>

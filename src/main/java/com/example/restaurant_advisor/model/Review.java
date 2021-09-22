@@ -20,12 +20,12 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"restaurant", "user"})
-public class Review extends BaseEntity{
+public class Review extends BaseEntity {
 
     @Column(name = "rating", nullable = false)
     @NotNull
     @Range(min = 1, max = 5, message = "Please set the rating from 1 to 5")
-    private int rating;
+    private Integer rating;
 
     @Column(name = "title", nullable = false)
     @NotBlank(message = "Please fill the title")
@@ -57,8 +57,18 @@ public class Review extends BaseEntity{
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "review_likes",
-            joinColumns = { @JoinColumn(name = "review_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+            joinColumns = {@JoinColumn(name = "review_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<User> likes = new HashSet<>();
+
+    public Review(Integer id, int rating, String title, String comment, LocalDate date, String filename) {
+        super(id);
+        this.rating = rating;
+        this.title = title;
+        this.comment = comment;
+        this.date = date;
+        this.active = false;
+        this.filename = filename;
+    }
 }
