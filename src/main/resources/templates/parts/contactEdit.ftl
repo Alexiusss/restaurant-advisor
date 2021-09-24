@@ -1,52 +1,48 @@
 <#import "/spring.ftl" as spring/>
 
-<div class="collapse<#if contact??>show</#if>" id="collapseContact">
-    <div class="form-group mt-3">
-        <form method="post" action="/main/${restaurant.getId()}/contact" enctype="multipart/form-data">
-            <div class="form-group">
-                <input type="text" class="form-control ${(addressError??)?string('is-invalid', '')}"
-                       value="<#if restaurant.getContact()??>${restaurant.getContact().getAddress()}</#if>"
-                       name="address" placeholder="Address"/>
-                <#if addressError??>
-                    <div class="invalid-feedback">
-                        ${addressError}
+<div class="modal fade" tabindex="-1" id="editContactModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editContactModalTitle"><@spring.message "contact.editTitle"/></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="detailsFormContact">
+                    <input type="hidden" id="id" name="id">
+                    <input type="hidden" name="_csrf" value="${_csrf.token}">
+                    <div class="form-group">
+                        <label for="address" class="col-form-label"><@spring.message "contact.address"/></label>
+                        <input type="text" class="form-control" name="address" id="address"
+                               placeholder="<@spring.message "contact.address"/>">
                     </div>
-                </#if>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control ${(websiteError??)?string('is-invalid', '')}"
-                       value="<#if restaurant.getContact()??>${restaurant.getContact().getWebsite()}</#if>"
-                       name="website" placeholder="Website"/>
-                <#if websiteError??>
-                    <div class="invalid-feedback">
-                        ${websiteError}
+                    <div class="form-group">
+                        <label for="website" class="col-form-label"><@spring.message "contact.website"/></label>
+                        <input type="text" class="form-control" name="website" id="website"
+                               placeholder="<@spring.message "contact.website"/>">
                     </div>
-                </#if>
-            </div>
-            <div class="form-group">
-                <input type="email" class="form-control ${(emailError??)?string('is-invalid', '')}"
-                       value="<#if restaurant.getContact()??>${restaurant.getContact().getEmail()}</#if>"
-                       name="email" placeholder="Email"/>
-                <#if emailError??>
-                    <div class="invalid-feedback">
-                        ${emailError}
+                    <div class="form-group">
+                        <label for="email" class="col-form-label"><@spring.message "contact.email"/></label>
+                        <input type="email" class="form-control" name="email" id="email"
+                               placeholder="<@spring.message "contact.email"/>">
                     </div>
-                </#if>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control ${(phone_numberError??)?string('is-invalid', '')}"
-                       value="<#if restaurant.getContact()??>${restaurant.getContact().getPhone_number()}</#if>"
-                       name="phone_number" placeholder="Phone number"/>
-                <#if phone_numberError??>
-                    <div class="invalid-feedback">
-                        ${phone_numberError}
+                    <div class="form-group">
+                        <label for="phone_number" class="col-form-label"><@spring.message "contact.phone_number"/></label>
+                        <input type="text" class="form-control" name="phone_number" id="phone_number"
+                               placeholder="<@spring.message "contact.phone_number"/>">
                     </div>
-                </#if>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span class="fa fa-close"></span>
+                            <@spring.message "common.close"/>
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                onclick="saveContact(${restaurant.getId()})">
+                            <span class="fa fa-check"></span>
+                            <@spring.message "common.save"/>
+                        </button>
+                    </div>
             </div>
-            <input type="hidden" name="_csrf" value="${_csrf.token}">
-            <div class="form-group">
-                <button type="submit" class="btn btn-outline-primary ml-2 btn-sm"><@spring.message "common.save"/></button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
