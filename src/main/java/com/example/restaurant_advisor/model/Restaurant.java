@@ -1,5 +1,6 @@
 package com.example.restaurant_advisor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
@@ -33,6 +34,7 @@ public class Restaurant extends BaseEntity {
     // https://vladmihalcea.com/hibernate-lazytoone-annotation/
     @LazyToOne(LazyToOneOption.NO_PROXY)
     @PrimaryKeyJoinColumn
+    @JsonIgnore
     private Contact contact;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant") //, cascade = CascadeType.ALL, orphanRemoval=true)

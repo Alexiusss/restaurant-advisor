@@ -1,26 +1,21 @@
 package com.example.restaurant_advisor.controller;
 
 import com.example.restaurant_advisor.model.Contact;
-import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
-import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
-
-@Controller
+@RestController
 @Slf4j
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class ContactController {
 
     @Autowired
@@ -29,27 +24,25 @@ public class ContactController {
     RestaurantRepository restaurantRepository;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping(value = "/main/{id}/contact")
+    @GetMapping(value = "/restaurants/{id}/contact")
+    public Contact getContact(@PathVariable int id) {
+        log.info("get contact by id {}", id);
+        return contactRepository.getExisted(id);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(value = "/restaurants/{id}/contact")
     @CacheEvict(value = "restaurants", allEntries = true)
-    public String addContact(@Valid Contact contact, BindingResult bindingResult,
-                             Model model, @PathVariable int id) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorsMap = getErrors(bindingResult);
-            model.mergeAttributes(errorsMap);
-            model.addAttribute("contact", contact);
-            Restaurant restaurant = restaurantRepository.getWithReviewsAndContact(id).orElseThrow();
-            model.addAttribute("restaurant", restaurant);
-            return "restaurant";
-        } else {
-            log.info("{} contact {}", contact.isNew()? "add":"edit", contact);
-            // https://stackoverflow.com/a/11105886
-            contact.setRestaurant(restaurantRepository.findById(id).orElseThrow());
-
-            contactRepository.save(contact);
-
-            model.addAttribute("contact", null);
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public String saveOrUpdateContact(@Valid Contact contact, @PathVariable int id) {
+        log.info("{} contact {}", contact.isNew() ? "add" : "edit", contact);
+        // https://stackoverflow.com/a/11105886
+        contact.setRestaurant(restaurantRepository.getExisted(id));
+        if(contact.isNew()) {
+            contact.setId(id);
         }
-        return "redirect:/main/" + id;
+        contactRepository.save(contact);
+
+        return "redirect:/restaurants/" + id;
     }
 }
