@@ -1,18 +1,3 @@
-function deleteRestaurant(id, name) {
-    if (confirm(i18n["confirmDelete"] + name + " ?")) {
-        $.ajax({
-            url: "/main/" + id,
-            type: "DELETE",
-            success: function () {
-                removeElement(id, "#restaurant-card_")
-                successNoty(i18n["deleted"])
-            },
-            error: function (xhr) {
-                console.log(xhr.responseText);
-            }
-        })
-    }
-}
 let failedNote;
 
 function closeNoty() {

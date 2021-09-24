@@ -15,7 +15,7 @@
                 <a class="nav-link" href="/"><@spring.message "app.home"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/main"><@spring.message "restaurant.title"/></a>
+                <a class="nav-link" href="/restaurants"><@spring.message "restaurant.title"/></a>
             </li>
             <#if isAdmin>
                 <li class="nav-item">

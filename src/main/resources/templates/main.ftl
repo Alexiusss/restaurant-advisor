@@ -1,4 +1,5 @@
-<script type="text/javascript" src="../../static/js/common.js"></script>
+<script defer type="text/javascript" src="../../static/js/common.js"></script>
+<script defer type="text/javascript" src="../../static/js/restaurant.js"></script>
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "parts/pager.ftl" as p>
@@ -7,12 +8,12 @@
 <@c.page>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <form method="get" action="/main" class="form-inline">
+            <form method="get" action="/restaurants" class="form-inline">
                 <input type="text" name="filter" class="form-control" placeholder="<@spring.message "restaurant.searchByName"/>"
                        value="${filter!}"/>
                 <button type="submit" class="btn btn-outline-primary ml-2 btn-sm"><@spring.message "common.search"/></button>
             </form>
-            <form method="get" action="/main" class="form-inline">
+            <form method="get" action="/restaurants" class="form-inline">
                 <input type="text" name="cuisine" class="form-control" placeholder="<@spring.message "restaurant.searchByCuisine"/>"
                        value="${cuisine!}"/>
                 <button type="submit" class="btn btn-outline-primary ml-2 btn-sm"><@spring.message "common.search"/></button>
@@ -20,11 +21,10 @@
         </div>
     </div>
     <#if isAdmin>
-        <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseRestaurant" role="button" aria-expanded="false"
-           aria-controls="collapseExample">
+        <button class="btn btn-outline-primary ml-2 btn-sm" onclick="addRestaurant()">
+            <span class="fa"></span>
             <@spring.message "restaurant.add"/>
-        </a>
-        <#include "parts/restaurantEdit.ftl"/>
+        </button>
     </#if>
 
 
@@ -34,11 +34,11 @@
                 <div>
                     <#if restaurant.filename??>
                         <img src="/img/${restaurant.filename}" class="card-img-top"
-                             onclick="window.location='/main/' + ${restaurant.getId()};"/>
+                             onclick="window.location='/restaurants/' + ${restaurant.getId()};"/>
                     </#if>
                 </div>
                 <div class="m-2">
-                    <span>${restaurant.name}</span>
+                    <span id="name_${restaurant.getId()}">${restaurant.name}</span>
                 </div>
                 <#--                https://stackoverflow.com/questions/45523742/how-can-i-use-rate-yo-jquery-star-rating-plugin-with-data-attribute-->
                 <#if (restaurant.getRating() > 0)??>
@@ -51,14 +51,18 @@
                 </#if>
                 <row>
                 <div class="m-2">
-                    <i>${restaurant.cuisine}</i>
+                    <i id="cuisine_${restaurant.getId()}">${restaurant.cuisine}</i>
                 </div>
                 <#if isAdmin>
-                    <div class="float-right">
-                    <button class="btn btn-outline-danger btn-sm" id="deleteRestaurant" onclick="deleteRestaurant(${restaurant.getId()}, '${restaurant.getName()}')">
+                    <row>
+                        <button class="btn btn-outline-primary ml-2 btn-sm float-left" onclick="editRestaurant(${restaurant.getId()})">
+                            <span class="fa"></span>
+                            <@spring.message "common.edit"/>
+                        </button>
+                    <button class="btn btn-outline-danger btn-sm mr-2 float-right" id="deleteRestaurant" onclick="deleteRestaurant(${restaurant.getId()}, '${restaurant.getName()}')">
                         <@spring.message "common.delete"/>
                     </button>
-                    </div>
+                    </row>
                 </#if>
                 </row>
             </div>
@@ -68,6 +72,8 @@
     </div>
     <@p.pager url page />
 </@c.page>
+<#include "parts/restaurantEdit.ftl">
+<#include "parts/i18n.ftl">
 <script>
     setTimeout(function(){$(".rateyo").rateYo()}, 10)
 </script>

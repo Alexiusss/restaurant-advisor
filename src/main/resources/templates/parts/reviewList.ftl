@@ -43,7 +43,7 @@
                         </#if>
                     </#if>
                     <#if currentUserId == review.getAuthor().getId() && currentPageUrl?contains("user-reviews")>
-                    <button class="btn btn-outline-danger" id="deleteReview" onclick="deleteReview(${review.getId()})">
+                    <button class="btn btn-outline-danger btn-sm" id="deleteReview" onclick="deleteReview(${review.getId()})">
                         <@spring.message "common.delete"/>
                     </button>
                 </div>

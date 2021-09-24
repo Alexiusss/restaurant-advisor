@@ -1,3 +1,4 @@
+<script defer type="text/javascript" src="../../static/js/restaurant.js"></script>
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "/spring.ftl" as spring/>
@@ -14,16 +15,8 @@
                     <h5 class="card-title">${restaurant.getName()}</h5>
                     <div>${rating} </div>
                     <p class="card-text">${restaurant.getCuisine()}</p>
-                </div>
-
-                <div class="text-right">
-                    <#if isAdmin>
-                        <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseRestaurant"
-                           role="button" aria-expanded="false"
-                           aria-controls="collapseRestaurant">
-                            <@spring.message "common.edit"/>
-                        </a>
-                    </#if>
+                    <div class="text-right">
+                    </div>
                 </div>
             </div>
 
@@ -32,31 +25,29 @@
                     <div class="card-body">
                         <h5 class="card-title"><@spring.message "contact.title"/></h5>
                         <#if restaurant.contact??>
-                            <p class="card-text">${restaurant.contact.getAddress()}</p>
-                            <p class="card-text">${restaurant.contact.getPhone_number()}</p>
+                            <p id="address_${restaurant.getId()}" class="card-text">${restaurant.contact.getAddress()}</p>
+                            <p id="phone_number_${restaurant.getId()}" class="card-text">${restaurant.contact.getPhone_number()}</p>
                             <#if restaurant.contact.getWebsite()??>
-                                <p class="card-text">${restaurant.contact.getWebsite()}</p>
+                                <p id="website_${restaurant.getId()}" class="card-text">${restaurant.contact.getWebsite()}</p>
                             </#if>
                             <#if restaurant.contact.getEmail()??>
-                                <p class="card-text">${restaurant.contact.getEmail()}</p>
+                                <p id="email_${restaurant.getId()}" class="card-text">${restaurant.contact.getEmail()}</p>
                             </#if>
                             <#if isAdmin>
-                                <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseContact"
-                                   role="button"
-                                   aria-expanded="false"
-                                   aria-controls="collapseContact">
+                                <button class="btn btn-outline-primary ml-2 btn-sm" onclick="editContact(${restaurant.getId()})">
+                                    <span class="fa"></span>
                                     <@spring.message "contact.edit"/>
-                                </a>
+                                </button>
                             </#if>
                         <#else>
-                            <p class="card-text"><small class="text-muted"><@spring.message "contact.noData"/></small></p>
+                            <p class="card-text"><small class="text-muted"><@spring.message "contact.noData"/></small>
+                            </p>
 
                             <#if isAdmin>
-                                <a class="btn btn-outline-primary ml-2 btn-sm" data-toggle="collapse" href="#collapseContact" role="button"
-                                   aria-expanded="false"
-                                   aria-controls="collapseExample">
+                                <button class="btn btn-outline-primary ml-2 btn-sm" onclick="addContact()">
+                                    <span class="fa"></span>
                                     <@spring.message "contact.add"/>
-                                </a>
+                                </button>
                             </#if>
                         </#if>
                     </div>
@@ -78,7 +69,6 @@
     </div>
 
     <#if isAdmin>
-        <#include "parts/restaurantEdit.ftl"/>
         <#include "parts/contactEdit.ftl"/>
     </#if>
 
@@ -87,22 +77,24 @@
     </div>
 
     <div class="list-group" style="width: 34rem">
-
         <a class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1"><@spring.message "review.title"/> </h5>
-                <button class="btn btn-outline-primary ml-2 btn-sm" onclick="addReview()">
+                <#if !isAdmin>
+                <button class="btn btn-outline-primary ml-2 btn-sm text-right" onclick="addReview()">
                     <span class="fa"></span>
                     <@spring.message "review.write"/>
                 </button>
+                </#if>
             </div>
         </a>
-
         <#include "parts/reviewList.ftl" />
     </div>
 
 </@c.page>
 
 <script>
-     setTimeout(function(){$(".rateyo").rateYo()}, 10)
+    setTimeout(function () {
+        $(".rateyo").rateYo()
+    }, 10)
 </script>
