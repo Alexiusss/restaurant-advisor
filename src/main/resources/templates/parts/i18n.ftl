@@ -8,4 +8,6 @@
     i18n["confirmDelete"] = '<@spring.message "common.deleteConfirm"/>';
     i18n["deleted"] = '<@spring.message "common.deleted"/>';
     i18n["search"] = '<@spring.message "common.search"/>';
+    i18n["notActivated"] = '<@spring.message "user.notActivated"/>';
+    i18n["repeated"] = '<@spring.message "review.repeated"/>';
 </script>

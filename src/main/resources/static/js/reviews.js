@@ -105,7 +105,7 @@ function editReview(id) {
 
 function editElement(formData, isActive) {
     // https://stackoverflow.com/a/40403989
-    if(isActive) {
+    if (isActive) {
         $("#li_" + formData.get("id")).attr("class", "list-group-item");
         $("#heart_" + formData.get("id")).attr("style", "visibility: visible");
     } else {
@@ -115,4 +115,15 @@ function editElement(formData, isActive) {
     //   https://itchief.ru/javascript/jquery-html-text
     $("#title_" + formData.get("id")).text(formData.get("title"))
     $("#comment_" + formData.get("id")).text(formData.get("comment"))
+}
+
+let infoModal = $("#infoModal");
+
+function infoModalOpen(message) {
+    if (message === 'notActivated') {
+        $("#infoModalContentBody").text(i18n["notActivated"]);
+    } else if (message === 'repeated') {
+        $("#infoModalContentBody").text(i18n["repeated"]);
+    }
+    infoModal.modal()
 }

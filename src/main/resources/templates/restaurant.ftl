@@ -25,16 +25,21 @@
                     <div class="card-body">
                         <h5 class="card-title"><@spring.message "contact.title"/></h5>
                         <#if restaurant.contact??>
-                            <p id="address_${restaurant.getId()}" class="card-text">${restaurant.contact.getAddress()}</p>
-                            <p id="phone_number_${restaurant.getId()}" class="card-text">${restaurant.contact.getPhone_number()}</p>
+                            <p id="address_${restaurant.getId()}"
+                               class="card-text">${restaurant.contact.getAddress()}</p>
+                            <p id="phone_number_${restaurant.getId()}"
+                               class="card-text">${restaurant.contact.getPhone_number()}</p>
                             <#if restaurant.contact.getWebsite()??>
-                                <p id="website_${restaurant.getId()}" class="card-text">${restaurant.contact.getWebsite()}</p>
+                                <p id="website_${restaurant.getId()}"
+                                   class="card-text">${restaurant.contact.getWebsite()}</p>
                             </#if>
                             <#if restaurant.contact.getEmail()??>
-                                <p id="email_${restaurant.getId()}" class="card-text">${restaurant.contact.getEmail()}</p>
+                                <p id="email_${restaurant.getId()}"
+                                   class="card-text">${restaurant.contact.getEmail()}</p>
                             </#if>
                             <#if isAdmin>
-                                <button class="btn btn-outline-primary ml-2 btn-sm" onclick="editContact(${restaurant.getId()})">
+                                <button class="btn btn-outline-primary ml-2 btn-sm"
+                                        onclick="editContact(${restaurant.getId()})">
                                     <span class="fa"></span>
                                     <@spring.message "contact.edit"/>
                                 </button>
@@ -81,15 +86,39 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1"><@spring.message "review.title"/> </h5>
                 <#if !isAdmin>
-                <button class="btn btn-outline-primary ml-2 btn-sm text-right" onclick="addReview()">
-                    <span class="fa"></span>
-                    <@spring.message "review.write"/>
-                </button>
+                    <button class="btn btn-outline-primary ml-2 btn-sm text-right" onclick="
+                    <#if currentUserActive>
+                        <#if isCurrentUserVoted==true>
+                                infoModalOpen('repeated')
+                        <#else>
+                                addReview()
+                        </#if>
+                    <#else>
+                            infoModalOpen('notActivated')
+                    </#if>
+                            ">
+                        <span class="fa"></span>
+                        <@spring.message "review.write"/>
+                    </button>
                 </#if>
             </div>
         </a>
         <#include "parts/reviewList.ftl" />
     </div>
+
+    <#if !currentUserActive || isCurrentUserVoted??>
+        <div class="modal" tabindex="-1" role="dialog" id="infoModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="infoModalContentBody">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </#if>
 
 </@c.page>
 

@@ -8,6 +8,7 @@ known = Session.SPRING_SECURITY_CONTEXT??
     name = user.getUser().getFirstName()
     isAdmin = user.getAuthorities()?seq_contains('ADMIN')
     currentUserId = user.getUser().getId()
+    currentUserActive = user.getUser().isActive()
     currentPageUrl = springMacroRequestContext.getRequestUri()
     >
 <#else>
@@ -15,6 +16,7 @@ known = Session.SPRING_SECURITY_CONTEXT??
     name = ""
     isAdmin = false
     currentUserId = -1
+    currentUserActive = false
     currentPageUrl = ""
     >
 </#if>

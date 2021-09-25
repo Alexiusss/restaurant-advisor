@@ -62,7 +62,9 @@ public class RestaurantService {
         List<ReviewDto> reviews = null;
         Page<ReviewDto> page = null;
         Map<Integer, Integer> ratings = new HashMap<>();
+        boolean isCurrentUserVoted = false;
         if (restaurant.getReviews() != null) {
+            isCurrentUserVoted = restaurant.getReviews().stream().anyMatch(review -> review.getUser().equals(authUser.getUser()));
             reviews = createListReviewTos(restaurant.getReviews(), authUser.getUser())
                     .stream()
                     .filter(ReviewDto::isActive)
@@ -80,6 +82,7 @@ public class RestaurantService {
         model.addAttribute("url", "/restaurants/" + id);
         model.addAttribute("rating", getRestaurantRating(reviews));
         model.addAttribute("ratings", ratings);
+        model.addAttribute("isCurrentUserVoted", isCurrentUserVoted);
     }
 
     public void addRestaurant(Restaurant restaurant, MultipartFile photo) throws IOException {
