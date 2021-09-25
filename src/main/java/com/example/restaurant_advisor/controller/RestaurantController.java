@@ -37,7 +37,6 @@ public class RestaurantController {
     @GetMapping(value = "/{id}/restaurant")
     public Restaurant getRestaurant(@PathVariable int id) {
         log.info("get restaurant by id {}", id);
-//        return restaurantRepository.getById(id);
         return restaurantRepository.getExisted(id);
     }
 

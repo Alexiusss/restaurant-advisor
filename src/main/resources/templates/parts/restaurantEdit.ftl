@@ -29,6 +29,11 @@
                                    for="customPhoto"><@spring.message "review.placeholderPhoto"/></label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="menu" class="col-form-label"><@spring.message "restaurant.menu"/></label>
+                        <input type="url" class="form-control" name="menu" id="menu"
+                               placeholder="<@spring.message "restaurant.menu"/>">
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             <span class="fa fa-close"></span>

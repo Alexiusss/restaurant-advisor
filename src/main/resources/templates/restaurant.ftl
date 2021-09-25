@@ -13,10 +13,10 @@
                 </#if>
                 <div class="card-body">
                     <h5 class="card-title">${restaurant.getName()}</h5>
-                    <div>${rating} </div>
                     <p class="card-text">${restaurant.getCuisine()}</p>
-                    <div class="text-right">
-                    </div>
+                    <#if restaurant.getMenu()??>
+                    <a id="menuLink" href="${restaurant.menu}" target="_blank"><@spring.message "restaurant.menu"/></a>
+                    </#if>
                 </div>
             </div>
 

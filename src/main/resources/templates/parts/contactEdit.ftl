@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-group">
                         <label for="website" class="col-form-label"><@spring.message "contact.website"/></label>
-                        <input type="text" class="form-control" name="website" id="website"
+                        <input type="url" class="form-control" name="website" id="website"
                                placeholder="<@spring.message "contact.website"/>">
                     </div>
                     <div class="form-group">

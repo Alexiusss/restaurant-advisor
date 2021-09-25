@@ -28,6 +28,10 @@ public class Restaurant extends BaseEntity {
     @Length(max = 255, message = "Message too long (more than 255)")
     private String cuisine;
 
+    @Column(name = "menu")
+    @Length(max = 255, message = "Message too long (more than 255)")
+    private String menu;
+
     // https://stackoverflow.com/a/54730020
     @OneToOne(mappedBy = "restaurant", cascade={CascadeType.PERSIST,CascadeType.REMOVE},
             fetch = FetchType.LAZY)
@@ -42,15 +46,17 @@ public class Restaurant extends BaseEntity {
 
     private String filename;
 
-    public Restaurant(String name, String cuisine) {
+    public Restaurant(String name, String cuisine, String menu) {
         super(null);
         this.name = name;
         this.cuisine = cuisine;
+        this.menu = menu;
     }
 
-    public Restaurant(Integer id, String name, String cuisine) {
+    public Restaurant(Integer id, String name, String cuisine, String menu) {
         super(id);
         this.name = name;
         this.cuisine = cuisine;
+        this.menu = menu;
     }
 }
