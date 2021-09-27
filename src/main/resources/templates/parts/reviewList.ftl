@@ -10,7 +10,8 @@
 
             <div class="d-flex w-100 justify-content-between">
                 <h5 id="title_${review.getId()}" class="mb-1">${review.getTitle()}</h5>
-                <small class="text-muted">${review.getDate().year}</small>
+<#--                https://www.baeldung.com/freemarker-operations#string-handling -->
+                <small class="text-muted">${review.getDate()?date('yyyy-MM-dd')}</small>
             </div>
             <p id="comment_${review.getId()}" class="mb-1">${review.getComment()}</p>
             <div class="figure w-25">
