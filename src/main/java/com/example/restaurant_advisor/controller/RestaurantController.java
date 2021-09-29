@@ -5,6 +5,7 @@ import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
 import com.example.restaurant_advisor.service.RestaurantService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -22,6 +23,7 @@ import java.io.IOException;
 @Slf4j
 @CacheConfig(cacheNames = "restaurants")
 @RequestMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Restaurant Controller")
 public class RestaurantController {
 
     @Autowired

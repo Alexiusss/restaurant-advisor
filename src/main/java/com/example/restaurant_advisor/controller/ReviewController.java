@@ -5,6 +5,7 @@ import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
 import com.example.restaurant_advisor.repository.ReviewRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ import static com.example.restaurant_advisor.util.validation.ValidationUtil.chec
 @RestController
 @RequestMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@Tag(name = "Review Controller")
 public class ReviewController {
     @Autowired
     ReviewRepository reviewRepository;

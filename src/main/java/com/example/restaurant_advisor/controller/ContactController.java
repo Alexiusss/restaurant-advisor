@@ -3,6 +3,7 @@ package com.example.restaurant_advisor.controller;
 import com.example.restaurant_advisor.model.Contact;
 import com.example.restaurant_advisor.repository.ContactRepository;
 import com.example.restaurant_advisor.repository.RestaurantRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @RestController
 @Slf4j
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Contact Controller")
 public class ContactController {
 
     @Autowired
