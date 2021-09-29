@@ -31,7 +31,8 @@
     <div class="card-columns" id="restaurant-list">
         <#list page.content as restaurant>
             <div class="card my-3" id="restaurant-card_${restaurant.getId()}">
-                <div>
+<#--                https://stackoverflow.com/a/47698201-->
+                <div class="card-img-top">
                     <#if restaurant.filename??>
                         <img src="/img/${restaurant.filename}" class="card-img-top"
                              onclick="window.location='/restaurants/' + ${restaurant.getId()};"/>

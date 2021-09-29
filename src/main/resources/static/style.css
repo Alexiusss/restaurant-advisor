@@ -83,3 +83,9 @@ body {
 tr[data-user-active="false"] {
     opacity: 0.3;
 }
+
+.card-img-top {
+    width: 100%;
+    height: 10vw;
+    object-fit: cover;
+}

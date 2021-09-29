@@ -6,10 +6,9 @@
 <@c.page>
     <div class="card-deck">
         <div class="row row-cols-1 row-cols-md-2">
-
-            <div class="card " style="width: 33rem;">
+            <div class="card mb-1 " style="width: 43rem;">
                 <#if restaurant.filename??>
-                    <img class="card-img-top" src="/img/${restaurant.filename}" alt="Card image cap">
+                    <img class="h-75" src="/img/${restaurant.filename}" alt="Card image cap">
                 </#if>
                 <div class="card-body">
                     <h5 class="card-title">${restaurant.getName()}</h5>
@@ -20,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="card-column">
+            <div class="card-column mb-1">
                 <div class="card text-right mb-1" style="height:17rem">
                     <div class="card-body">
                         <h5 class="card-title"><@spring.message "contact.title"/></h5>
@@ -58,7 +57,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-1" style="height:16rem">
+                <div class="card flex-fill">
                     <#if rating==0 >
                         <div>
                             ${restaurant.getName()} <@spring.message "ratingCard.noReviews"/>
@@ -77,11 +76,7 @@
         <#include "parts/contactEdit.ftl"/>
     </#if>
 
-    <div class="mx-auto" style="width: 200px;">
-        Centered element
-    </div>
-
-    <div class="list-group" style="width: 34rem">
+    <div class="list-group">
         <a class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1"><@spring.message "review.title"/> </h5>
