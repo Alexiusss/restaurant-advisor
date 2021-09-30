@@ -54,7 +54,7 @@ public class MvcConfig implements WebMvcConfigurer {
     //  https://www.baeldung.com/spring-boot-internationalization
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RedirectInterceptor());
+       // registry.addInterceptor(new RedirectInterceptor());
         registry.addInterceptor(localeChangeInterceptor());
     }
 
