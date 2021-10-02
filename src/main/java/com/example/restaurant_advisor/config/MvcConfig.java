@@ -1,8 +1,9 @@
 package com.example.restaurant_advisor.config;
 
 import com.example.restaurant_advisor.util.JsonUtil;
-import com.example.restaurant_advisor.util.RedirectInterceptor;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,9 +22,6 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.util.Locale;
-
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 @Configuration
 @EnableCaching
@@ -54,7 +52,7 @@ public class MvcConfig implements WebMvcConfigurer {
     //  https://www.baeldung.com/spring-boot-internationalization
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-       // registry.addInterceptor(new RedirectInterceptor());
+        // registry.addInterceptor(new RedirectInterceptor());
         registry.addInterceptor(localeChangeInterceptor());
     }
 
@@ -77,8 +75,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public MessageSource messageSource() {
         //https://stackoverflow.com/a/3154881
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages/app");
-        //messageSource.setBasename("file:///#{systemEnvironment['RESTAURANT_ADVISOR_ROOT']}/config/messages/app");
+        messageSource.setBasename("classpath:/i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setFallbackToSystemLocale(false);
         return messageSource;
@@ -87,7 +84,7 @@ public class MvcConfig implements WebMvcConfigurer {
     //https://stackoverflow.com/a/47465362
     @Bean(name = "messageSourceAccessor")
     public org.springframework.context.support.MessageSourceAccessor messageSourceAccessor() {
-        return new MessageSourceAccessor( messageSource());
+        return new MessageSourceAccessor(messageSource());
     }
 
     @Bean

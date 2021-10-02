@@ -8,6 +8,7 @@ import com.example.restaurant_advisor.model.dto.ReviewDto;
 import com.example.restaurant_advisor.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     MailSender mailSender;
 
+    @Value("${myhostname}")
+    private String myhostname;
+
     @CachePut(value = "users", key = "#user.email")
     public boolean addUser(User user) {
         log.info("create {}", user);
@@ -50,8 +54,9 @@ public class UserService implements UserDetailsService {
         if (!ObjectUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Restaurant Advisor. Please visit next link: <a href='http://localhost:8080/user/activate/%s'>link</a>",
+                            "Welcome to Restaurant Advisor. Please visit next link: <a href='http://%s/user/activate/%s'>link</a>",
                     user.getFirstName(),
+                    myhostname,
                     user.getActivationCode()
             );
 

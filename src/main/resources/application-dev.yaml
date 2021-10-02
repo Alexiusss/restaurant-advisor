@@ -1,3 +1,5 @@
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
 spring:
   jpa:
     generate-ddl: false
@@ -6,18 +8,16 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 20
-        jdbc:
-          lob:
-            non-contextual-creation: true
+        #  https://stackoverflow.com/a/48129503
         jdbc.batch_size: 20
     open-in-view: false
     hibernate:
       ddl-auto: validate
   datasource:
-#    url: jdbc:postgresql://localhost:5432/restaurant_advisor
-    url: jdbc:postgresql://localhost/restaurant_advisor
+    url: jdbc:postgresql://localhost:5432/restaurant_advisor
     username: postgres
     password: 1234
+    # https://stackoverflow.com/a/49575492
   data:
     web:
       pageable:
@@ -25,14 +25,18 @@ spring:
   freemarker:
     expose-request-attributes: true
     suffix: .ftl
+    # https://stackoverflow.com/a/24811052
     expose-spring-macro-helpers: true
+    # https://stackoverflow.com/a/27162270
     request-context-attribute: rc
+    #  https://stackoverflow.com/questions/53172123/flyway-found-non-empty-schemas-public-without-schema-history-table-use-bas
   jackson:
     visibility:
       field: any
       getter: none
       setter: none
       is-getter: none
+    # https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-cache
   cache:
     cache-names: users, restaurants
     caffeine.spec: maximumSize=1,expireAfterAccess=60s
@@ -46,7 +50,7 @@ spring:
     protocol: smtps
     properties:
       mail:
-        debug: false
+        debug: true
   session:
     jdbc:
       initialize-schema: always
@@ -58,13 +62,11 @@ logging:
     com.example.restaurant_advisor: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
-
-upload.path: /home/ec2-user/uploads/
+upload.path: /c:/workspace/project/restaurant_advisor/uploads/
 recaptcha.secret: 6Ldosm0bAAAAAJCXZgVkciv2zai6rT1hEMybmJo_
-myhostname: restaurantadvisor.sytes.net
+myhostname: localhost:8080
 server.servlet:
   encoding:
-    charset: UTF-8
-    enabled: true
+    charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
+    enabled: true # Enable http encoding support
     force: true
-
