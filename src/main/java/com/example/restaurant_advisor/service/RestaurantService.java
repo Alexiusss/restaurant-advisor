@@ -83,6 +83,7 @@ public class RestaurantService {
         model.addAttribute("rating", getRestaurantRating(reviews));
         model.addAttribute("ratings", ratings);
         model.addAttribute("isCurrentUserVoted", isCurrentUserVoted);
+        model.addAttribute("isMenuExisted", !restaurant.getMenu().isEmpty());
     }
 
     public void addRestaurant(Restaurant restaurant, MultipartFile photo) throws IOException {
@@ -96,11 +97,15 @@ public class RestaurantService {
 
         assureIdConsistent(restaurant, restaurant.id());
         log.info("update restaurant {}", restaurant.id());
+        Restaurant updatedRestaurant = restaurantRepository.getExisted(restaurant.id());
+        updatedRestaurant.setName(restaurant.getName());
+        updatedRestaurant.setCuisine(restaurant.getCuisine());
+        updatedRestaurant.setMenu(restaurant.getMenu());
 
-        if (!ObjectUtils.isEmpty(photo)) {
-            restaurant.setFilename(saveFile(photo, uploadPath));
+        if (!photo.isEmpty()) {
+            updatedRestaurant.setFilename(saveFile(photo, uploadPath));
         }
 
-        restaurantRepository.save(restaurant);
+        restaurantRepository.save(updatedRestaurant);
     }
 }
