@@ -4,6 +4,7 @@ import com.example.restaurant_advisor.model.Restaurant;
 import com.example.restaurant_advisor.model.dto.RestaurantDto;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,10 +19,11 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
             ") " +
             " FROM Restaurant r " +
             "LEFT OUTER JOIN r.reviews rr ON rr.active=true " +
-            "WHERE r.cuisine LIKE ?1% OR " +
-            "r.name LIKE ?1% " +
+            "WHERE r.cuisine LIKE %:filter% OR " +
+            "r.name LIKE %:filter% " +
             "GROUP BY r")
-    List<RestaurantDto> findByCuisineOrNameContains(String filter);
+    //  https://www.baeldung.com/spring-jpa-like-queries
+    List<RestaurantDto> findByCuisineOrNameContains(@Param("filter") String filter);
 
     @Query("SELECT DISTINCT NEW com.example.restaurant_advisor.model.dto.RestaurantDto(" +
             "r.id, r.name, r.cuisine, r.filename, " +
