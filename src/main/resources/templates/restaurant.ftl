@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title">${restaurant.getName()}</h5>
                     <p class="card-text">${restaurant.getCuisine()}</p>
-                    <#if restaurant.getMenu()??>
+                    <#if isMenuExisted>
                     <a id="menuLink" href="${restaurant.menu}" target="_blank"><@spring.message "restaurant.menu"/></a>
                     </#if>
                 </div>

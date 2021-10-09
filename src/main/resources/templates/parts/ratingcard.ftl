@@ -4,6 +4,8 @@
     <div class="row justify-content-center">
         <div class="row justify-content-left d-flex">
             <div class="col-md-4 d-flex flex-column">
+<#--                https://stackoverflow.com/a/13356401-->
+                <div class="divCenter">
                 <div class="rating-box">
                     <h1 class="pt-4">${rating}</h1>
                     <p class=""><@spring.message "ratingCard.outOf"/>5</p>
@@ -20,6 +22,7 @@
                 <div class="text-center">
                     <@spring.message "ratingCard.count"/>${reviews_count}
                 </div>
+            </div>
             </div>
             <div class="col-md-8">
                 <div class="rating-bar0 justify-content-center">
