@@ -51,6 +51,7 @@ public class RestaurantService {
         Page<RestaurantDto> page = createPageFromList(pageable, restaurants);
 
         model.addAttribute("page", page);
+        model.addAttribute("isPaginationNeed", page.getTotalElements()> 5);
         model.addAttribute("url", "/restaurants");
         model.addAttribute("filter", filter);
         model.addAttribute("cuisine", cuisine);

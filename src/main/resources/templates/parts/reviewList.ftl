@@ -10,7 +10,7 @@
 
             <div class="d-flex w-100 justify-content-between">
                 <h5 id="title_${review.getId()}" class="mb-1">${review.getTitle()}</h5>
-<#--                https://www.baeldung.com/freemarker-operations#string-handling -->
+                <#--                https://www.baeldung.com/freemarker-operations#string-handling -->
                 <small class="text-muted">${review.getDate()?date('yyyy-MM-dd')}</small>
             </div>
             <p id="comment_${review.getId()}" class="mb-1">${review.getComment()}</p>
@@ -24,16 +24,16 @@
                             href="/user-reviews/${review.getAuthor().getId()}">${review.getAuthorName()}</a>
                 </div>
 
-                    <a id="heart_${review.getId()}"
-                       <#if !review.isActive()> style="visibility: hidden" </#if>
-                       class="float-center" onclick="like(${review.getId()})">
-                        <#if review.meLiked>
-                            <i id="likeReview_${review.getId()}" class="fas fa-heart"></i>
-                        <#else>
-                            <i id="likeReview_${review.getId()}" class="far fa-heart"></i>
-                        </#if>
-                        <span class="likes-count_${review.getId()}"> ${review.likes} </span>
-                    </a>
+                <a id="heart_${review.getId()}"
+                        <#if !review.isActive()> style="visibility: hidden" </#if>
+                   class="float-center" onclick="like(${review.getId()})">
+                    <#if review.meLiked>
+                        <i id="likeReview_${review.getId()}" class="fas fa-heart"></i>
+                    <#else>
+                        <i id="likeReview_${review.getId()}" class="far fa-heart"></i>
+                    </#if>
+                    <span class="likes-count_${review.getId()}"> ${review.likes} </span>
+                </a>
 
                 <div class="float-right">
                     <#if isAdmin>
@@ -44,7 +44,8 @@
                         </#if>
                     </#if>
                     <#if currentUserId == review.getAuthor().getId() && currentPageUrl?contains("user-reviews")>
-                    <button class="btn btn-outline-danger btn-sm" id="deleteReview" onclick="deleteReview(${review.getId()})">
+                    <button class="btn btn-outline-danger btn-sm" id="deleteReview"
+                            onclick="deleteReview(${review.getId()})">
                         <@spring.message "common.delete"/>
                     </button>
                 </div>
@@ -55,4 +56,6 @@
 </#list>
 <#include "reviewEdit.ftl">
 <#include "i18n.ftl">
-<@p.pager url page />
+<#if isPaginationNeed??>
+    <@p.pager url page />
+</#if>

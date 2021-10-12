@@ -54,7 +54,9 @@ public class RootController {
                                 @AuthenticationPrincipal AuthUser user) {
         log.info("get all reviews");
         List<ReviewDto> reviewsDto =  createListReviewTos(reviewRepository.getAll(), user.getUser());
+
         model.addAttribute("page", createPageFromList(pageable, reviewsDto));
+        model.addAttribute("isPaginationNeed", reviewsDto.size() > 5);
         model.addAttribute("url", "/reviews");
         return "reviews";
     }

@@ -71,7 +71,9 @@
             No restaurant
         </#list>
     </div>
+        <#if isPaginationNeed??>
     <@p.pager url page />
+        </#if>
 </@c.page>
 <#include "parts/restaurantEdit.ftl">
 <#include "parts/i18n.ftl">
