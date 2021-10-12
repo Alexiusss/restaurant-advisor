@@ -64,7 +64,7 @@ public class User extends BaseEntity implements HasIdAndEmail {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
     //https://stackoverflow.com/a/44988100/548473
     @OnDelete(action = OnDeleteAction.CASCADE)

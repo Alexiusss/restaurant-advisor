@@ -52,6 +52,7 @@ public class Review extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -60,6 +61,7 @@ public class Review extends BaseEntity {
             joinColumns = {@JoinColumn(name = "review_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<User> likes = new HashSet<>();
 
     public Review(Integer id, int rating, String title, String comment, LocalDate date, String filename) {
