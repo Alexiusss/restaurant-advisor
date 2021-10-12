@@ -12,8 +12,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -94,6 +94,7 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
+    @Transactional
     public void updateRestaurant(Restaurant restaurant, MultipartFile photo) throws IOException {
 
         assureIdConsistent(restaurant, restaurant.id());
@@ -106,7 +107,5 @@ public class RestaurantService {
         if (!photo.isEmpty()) {
             updatedRestaurant.setFilename(saveFile(photo, uploadPath));
         }
-
-        restaurantRepository.save(updatedRestaurant);
     }
 }

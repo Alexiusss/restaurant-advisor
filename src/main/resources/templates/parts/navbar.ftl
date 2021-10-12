@@ -29,10 +29,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/user/profile"><@spring.message "app.profile"/></a>
                 </li>
+                <#if !isAdmin>
                 <li class="nav-item">
                     <a class="nav-link"
                        href="/user-reviews/${currentUserId}"><@spring.message "review.usersReview"/></a>
                 </li>
+                </#if>
             </#if>
         </ul>
         <div class="navbar-text mr-3">${name}</div>

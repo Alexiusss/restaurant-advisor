@@ -7,7 +7,7 @@
 <#--                https://stackoverflow.com/a/13356401-->
                 <div class="divCenter">
                 <div class="rating-box">
-                    <h1 class="pt-4">${rating}</h1>
+                    <h1 class="pt-4">${rating?string(",##0.0;; roundingMode=halfEven")}</h1>
                     <p class=""><@spring.message "ratingCard.outOf"/>5</p>
                 </div>
                 <#if (rating > 0)??>
