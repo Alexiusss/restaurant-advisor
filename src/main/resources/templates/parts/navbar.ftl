@@ -43,7 +43,7 @@
             <a class="dropdown-toggle nav-link my-1 ml-2" data-toggle="dropdown">${rc.locale.language!}</a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" onclick="show('en')">English</a>
-                <a class="dropdown-item"onclick="show('ru')">Русский</a>
+                <a class="dropdown-item" onclick="show('ru')">Русский</a>
             </div>
         </div>
     </div>

@@ -51,17 +51,7 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(prepareToSave(user));
 
-        if (!ObjectUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to Restaurant Advisor. Please visit next link: <a href='http://%s/user/activate/%s'>link</a>",
-                    user.getFirstName(),
-                    myhostname,
-                    user.getActivationCode()
-            );
-
-            mailSender.send(user.getEmail(), "Activation code", message);
-        }
+        sendMessage(user);
 
         return true;
     }
@@ -106,6 +96,20 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return true;
+    }
+
+    private void sendMessage(User user) {
+        if (!ObjectUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Restaurant Advisor. Please visit next link: <a href='http://%s/user/activate/%s'>link</a>",
+                    user.getFirstName(),
+                    myhostname,
+                    user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Activation code", message);
+        }
     }
 
     @Transactional

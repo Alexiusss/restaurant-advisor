@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.example.restaurant_advisor.UserTestUtil.ADMIN_MAIL;
-import static com.example.restaurant_advisor.UserTestUtil.admin;
+import static com.example.restaurant_advisor.UserTestUtil.ADMIN;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,8 +18,7 @@ public class LoginTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get("/"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello, guest")))
-                .andExpect(content().string(containsString("Please, login")));
+                .andExpect(content().string(containsString("Hello, guest")));
     }
 
     @Test
@@ -32,7 +31,7 @@ public class LoginTest extends AbstractControllerTest {
 
     @Test
     public void correctLoginTest() throws Exception {
-        mockMvc.perform(formLogin().user(ADMIN_MAIL).password(admin.getPassword()))
+        mockMvc.perform(formLogin().user(ADMIN_MAIL).password(ADMIN.getPassword()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));

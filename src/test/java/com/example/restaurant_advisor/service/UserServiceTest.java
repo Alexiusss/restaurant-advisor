@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.example.restaurant_advisor.UserTestUtil.NEW_USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -31,9 +32,7 @@ class UserServiceTest {
 
     @Test
     void addUser() {
-        User user = new User();
-
-        user.setEmail("test@mail.ru");
+        User user = NEW_USER;
 
         boolean isUserCreated = userService.addUser(user);
 

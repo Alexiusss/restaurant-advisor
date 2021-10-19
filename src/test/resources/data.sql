@@ -16,10 +16,10 @@ VALUES ('ADMIN', 1),
        ('USER', 1),
        ('USER', 2);
 
-INSERT INTO restaurants(id, cuisine, name)
-VALUES (1, 'seafood', 'restaurant1'),
-       (2, 'vegan', 'restaurant2'),
-       (3, 'italian', 'cafe'),
-       (4, 'italian', 'bar');
+INSERT INTO restaurants(id, cuisine, name, menu)
+VALUES (3, 'seafood', 'restaurant1', 'www.menu1.com'),
+       (4, 'vegan', 'restaurant2', 'www.menu2.com'),
+       (5, 'italian', 'cafe', 'www.menu3.com'),
+       (6, 'italian', 'bar', 'www.menu4.com');
 
 ALTER sequence hibernate_sequence RESTART WITH 33;
