@@ -44,4 +44,12 @@ public class LoginTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void unAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get("/users"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
 }
