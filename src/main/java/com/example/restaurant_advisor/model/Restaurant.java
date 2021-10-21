@@ -59,4 +59,12 @@ public class Restaurant extends BaseEntity {
         this.cuisine = cuisine;
         this.menu = menu;
     }
+
+    public Restaurant(Integer id, String name, String cuisine, String menu, String filename) {
+        super(id);
+        this.name = name;
+        this.cuisine = cuisine;
+        this.menu = menu;
+        this.filename = filename;
+    }
 }

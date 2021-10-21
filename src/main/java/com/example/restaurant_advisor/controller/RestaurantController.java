@@ -22,9 +22,11 @@ import java.io.IOException;
 @RestController
 @Slf4j
 @CacheConfig(cacheNames = "restaurants")
-@RequestMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Restaurant Controller")
 public class RestaurantController {
+
+    static final String REST_URL = "/restaurants";
 
     @Autowired
     RestaurantRepository restaurantRepository;
