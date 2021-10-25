@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.example.restaurant_advisor.UserTestUtil.NEW_USER;
+import static com.example.restaurant_advisor.util.UserTestUtil.NEW_USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

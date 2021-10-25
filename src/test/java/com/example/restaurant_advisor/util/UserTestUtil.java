@@ -1,4 +1,4 @@
-package com.example.restaurant_advisor;
+package com.example.restaurant_advisor.util;
 
 import com.example.restaurant_advisor.model.Role;
 import com.example.restaurant_advisor.model.User;

@@ -1,5 +1,6 @@
-package com.example.restaurant_advisor;
+package com.example.restaurant_advisor.util;
 
+import com.example.restaurant_advisor.controller.MatcherFactory;
 import com.example.restaurant_advisor.model.Restaurant;
 import lombok.experimental.UtilityClass;
 
@@ -7,6 +8,8 @@ import java.util.List;
 
 @UtilityClass
 public class RestaurantTestUtil {
+
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class,"contact", "reviews");
     
     public static final Restaurant RESTAURANT1 = new Restaurant(3, "restaurant1","seafood", "www.menu1.com", null);
     public static final Restaurant RESTAURANT2 = new Restaurant(4, "restaurant2","vegan", "www.menu2.com", null);

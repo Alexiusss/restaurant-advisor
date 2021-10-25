@@ -9,8 +9,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.example.restaurant_advisor.RestaurantTestUtil.RESTAURANT1;
-import static com.example.restaurant_advisor.UserTestUtil.ADMIN_MAIL;
+import static com.example.restaurant_advisor.util.RestaurantTestUtil.RESTAURANT1;
+import static com.example.restaurant_advisor.util.RestaurantTestUtil.RESTAURANT_MATCHER;
+import static com.example.restaurant_advisor.util.UserTestUtil.ADMIN_MAIL;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -34,7 +35,8 @@ class RestaurantControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1.id() + "/restaurant"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1));
     }
 
     @Test
@@ -58,5 +60,4 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
         assertFalse(restaurantRepository.findById(RESTAURANT1.id()).isPresent());
     }
-
 }

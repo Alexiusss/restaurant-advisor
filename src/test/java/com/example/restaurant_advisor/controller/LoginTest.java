@@ -4,8 +4,8 @@ package com.example.restaurant_advisor.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.example.restaurant_advisor.UserTestUtil.ADMIN_MAIL;
-import static com.example.restaurant_advisor.UserTestUtil.ADMIN;
+import static com.example.restaurant_advisor.util.UserTestUtil.ADMIN_MAIL;
+import static com.example.restaurant_advisor.util.UserTestUtil.ADMIN;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
