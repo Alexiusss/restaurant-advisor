@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +21,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkModificationAllowed;
 
 @Controller
 @RequestMapping("user/")
@@ -31,6 +33,9 @@ import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
 @CacheConfig(cacheNames = "users")
 public class UserController {
     private final static String CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
+
+    @Autowired
+    MessageSourceAccessor messageSource;
 
     @Autowired
     UserRepository userRepository;
@@ -55,21 +60,23 @@ public class UserController {
        CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 
        if (!response.isSuccess()){
-           model.addAttribute("captchaError", "Fill captcha");
+           model.addAttribute("captchaError", messageSource.getMessage("error.Captcha"));
        }
 
         if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())) {
-            model.addAttribute("passwordError", "Passwords are different");
+            model.addAttribute("passwordError",  messageSource.getMessage("user.passwordError"));
         }
 
-        if (bindingResult.hasErrors() || !response.isSuccess()) {
-            Map<String, String> errors = getErrors(bindingResult);
+        if (bindingResult.hasErrors() || !response.isSuccess() || model.containsAttribute("passwordError")) {
+
+            // https://howtodoinjava.com/spring-boot2/rest/i18n-internationalization/
+            Map<String, String> errors = getErrors(bindingResult, messageSource);
 
             model.mergeAttributes(errors);
             return "registration";
         }
 
-        if (!userService.addUser(user)) {
+        if (userService.addUser(user).isEmpty()) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }

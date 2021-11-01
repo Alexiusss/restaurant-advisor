@@ -4,6 +4,7 @@ import com.example.restaurant_advisor.model.Review;
 import com.example.restaurant_advisor.model.User;
 import com.example.restaurant_advisor.model.dto.ReviewDto;
 import lombok.experimental.UtilityClass;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -24,10 +22,10 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ControllerUtils {
 
-    public static Map<String, String> getErrors(BindingResult bindingResult) {
+    public static Map<String, String> getErrors(BindingResult bindingResult, MessageSourceAccessor messageSource) {
         Collector<FieldError, ?, Map<String, String>> collector = Collectors.toMap(
                 fieldError -> fieldError.getField() + "Error",
-                FieldError::getDefaultMessage
+                fieldError -> messageSource.getMessage(fieldError.getObjectName() + "." + fieldError.getField()) + " " + fieldError.getDefaultMessage()
         );
         return bindingResult.getFieldErrors().stream().collect(collector);
     }

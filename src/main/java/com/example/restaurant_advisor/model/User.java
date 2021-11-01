@@ -28,26 +28,26 @@ import java.util.Set;
 public class User extends BaseEntity implements HasIdAndEmail {
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email(message = "Email is not correct")
-    @NotBlank(message = "Email cannot be empty")
+    @Email
+    @NotBlank
     private String email;
 
     @Column(name = "firstName")
-    @NotBlank(message = "First name cannot be empty")
+    @NotBlank
     private String firstName;
 
     @Column(name = "lastName")
-    @NotBlank(message = "Last name cannot be empty")
+    @NotBlank
     private String lastName;
 
     @Column(name = "password", nullable = false)
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank
     // https://stackoverflow.com/a/12505165/548473
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Transient
-    @NotBlank(message = "Password2 cannot be empty")
+    @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password2;
 
