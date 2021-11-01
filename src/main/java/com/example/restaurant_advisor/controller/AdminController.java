@@ -54,6 +54,7 @@ public class AdminController {
         if (user.isNew()) {
             userService.addUser(user);
         } else {
+            checkModificationAllowed(user.getId());
             userService.updateUser(user, form);
         }
     }
@@ -63,6 +64,7 @@ public class AdminController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void activate(@PathVariable int id, @RequestParam boolean active) {
+        checkModificationAllowed(id);
         log.info(active ? "active {}" : "dormant {}", id);
         userService.activate(id, active);
     }
@@ -72,6 +74,7 @@ public class AdminController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void deleteUser(@PathVariable int id) {
+        checkModificationAllowed(id);
         log.info("delete {}", id);
         userRepository.deleteExisted(id);
     }

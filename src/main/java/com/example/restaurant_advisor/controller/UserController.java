@@ -111,6 +111,7 @@ public class UserController {
             @RequestParam String lastName,
             @RequestParam String password
     ) {
+        checkModificationAllowed(authUser.getUser().getId());
         User user = authUser.getUser();
         user.setFirstName(firstName);
         user.setLastName(lastName);

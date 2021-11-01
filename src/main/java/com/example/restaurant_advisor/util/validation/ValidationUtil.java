@@ -66,4 +66,10 @@ public class ValidationUtil {
             throw new IllegalRequestDataException("Entity with id=" + id + " not found");
         }
     }
+
+    public static void checkModificationAllowed(int id) {
+        if (id == 1) {
+            throw new ModificationRestrictionException();
+        }
+    }
 }
