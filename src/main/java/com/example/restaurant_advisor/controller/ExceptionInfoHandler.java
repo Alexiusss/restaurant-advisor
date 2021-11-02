@@ -32,7 +32,7 @@ public class ExceptionInfoHandler {
 
     // https://stackoverflow.com/a/42422568
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
-            "uk_6dotkott2kjsp8vw4d0m25fb7", EXCEPTION_DUPLICATE_EMAIL,
+            "user_email_unique", EXCEPTION_DUPLICATE_EMAIL,
             "reviews_unique_user_restaurant_idx", EXCEPTION_DUPLICATE_REVIEW);
 
     private final MessageSourceAccessor messageSourceAccessor;
