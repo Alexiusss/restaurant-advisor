@@ -42,18 +42,27 @@ public class UserService implements UserDetailsService {
     private String myhostname;
 
     @CachePut(value = "users", key = "#user.email")
-    public boolean addUser(User user) {
-        log.info("create {}", user);
+    public boolean registerUser(User user) {
+        log.info("register {}", user);
         checkNew(user);
         user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
+        if (userRepository.save(prepareToSave(user)) != null) {
+            sendMessage(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        userRepository.save(prepareToSave(user));
-
-        sendMessage(user);
-
-        return true;
+    @CachePut(value = "users", key = "#user.email")
+    public User addUser(User user, Map<String, String> form) {
+        log.info("create {}", user);
+        checkNew(user);
+        user.setActive(true);
+        setRoles(user, form);
+        return userRepository.save(prepareToSave(user));
     }
 
     @Transactional
@@ -62,6 +71,25 @@ public class UserService implements UserDetailsService {
 
         assureIdConsistent(user, user.id());
         log.info("update {} with id={}", user, user.id());
+
+        User updated = userRepository.getExisted(user.id());
+        updated.setFirstName(user.getFirstName());
+        updated.setLastName(user.getLastName());
+        updated.setEmail(user.getEmail());
+        updated.setPassword(user.getPassword());
+        setRoles(updated, form);
+
+        prepareAndSave(updated);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return new AuthUser(userRepository.findByEmailIgnoreCase(username.toLowerCase()).orElseThrow(
+                () -> new UsernameNotFoundException("User '" + username + "' was not found")
+        ));
+    }
+
+    private void setRoles(User user, Map<String, String> form) {
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());
@@ -73,15 +101,6 @@ public class UserService implements UserDetailsService {
             }
         }
         user.setRoles(userRoles);
-
-        prepareAndSave(user);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new AuthUser(userRepository.findByEmailIgnoreCase(username.toLowerCase()).orElseThrow(
-                () -> new UsernameNotFoundException("User '" + username + "' was not found")
-        ));
     }
 
     public boolean activateUser(String code) {
@@ -154,6 +173,5 @@ public class UserService implements UserDetailsService {
         model.addAttribute("page", page);
         model.addAttribute("url", "/user-reviews/" + currentUser.id());
         model.addAttribute("isCurrentUser", currentUser.getUser().equals(user));
-
     }
 }

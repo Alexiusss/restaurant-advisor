@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.example.restaurant_advisor.util.ControllerUtils.getErrors;
@@ -76,7 +75,7 @@ public class UserController {
             return "registration";
         }
 
-        if (userService.addUser(user).isEmpty()) {
+            if (!userService.registerUser(user)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }

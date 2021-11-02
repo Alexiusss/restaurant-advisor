@@ -1,9 +1,8 @@
 package com.example.restaurant_advisor.util.validation;
 
 import com.example.restaurant_advisor.HasId;
-import com.example.restaurant_advisor.error.ErrorType;
-import com.example.restaurant_advisor.error.IllegalRequestDataException;
-import com.example.restaurant_advisor.error.NotFoundException;
+import com.example.restaurant_advisor.error.*;
+import com.example.restaurant_advisor.model.User;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
