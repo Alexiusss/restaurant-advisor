@@ -44,21 +44,28 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(value = "/{id}")
-    public User getUser(@PathVariable int id) {
+    public ResponseEntity<User> getUser(@PathVariable int id) {
         log.info("getById {}", id);
-        return userRepository.findById(id).orElse(null);
+        return ResponseEntity.of(userRepository.findById(id));
     }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void userSaveOrUpdate(@Valid User user, @RequestParam Map<String, String> form) {
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @CacheEvict(allEntries = true)
+    public ResponseEntity<User> saveOrUpdate(@Valid User user, @RequestParam Map<String, String> form) {
+        checkPasswords(user);
         if (user.isNew()) {
-            userService.addUser(user);
+            User created = userService.addUser(user, form);
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(REST_URL + "/{id}")
+                    .buildAndExpand(created.getId()).toUri();
+            return ResponseEntity.created(uriOfNewResource).body(created);
         } else {
-            checkModificationAllowed(user.getId());
+            checkModificationAllowed(user.id());
             userService.updateUser(user, form);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
 
