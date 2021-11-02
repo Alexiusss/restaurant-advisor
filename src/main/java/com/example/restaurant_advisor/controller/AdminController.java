@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkModificationAllowed;
+import static com.example.restaurant_advisor.util.validation.ValidationUtil.checkPasswords;
+
 @RestController
 @RequestMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j

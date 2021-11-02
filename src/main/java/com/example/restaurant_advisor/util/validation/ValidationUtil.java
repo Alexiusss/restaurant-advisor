@@ -60,6 +60,11 @@ public class ValidationUtil {
     public static <T> T checkNotFoundWithId(Optional<T> optional, String msg) {
         return optional.orElseThrow(() -> new NotFoundException(msg));
     }
+    public static void checkPasswords(User user) {
+        if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())) {
+            throw new AppException(ErrorType.VALIDATION_ERROR, "user.passwordError");
+        }
+    }
 
     public static void checkModification(int count, int id) {
         if (count == 0) {
