@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,7 +42,6 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + NOT_FOUND + "/restaurant"))
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -72,7 +70,6 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
         perform(multipart)
                 .andExpect(authenticated())
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -124,7 +121,6 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + NOT_FOUND))
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
 

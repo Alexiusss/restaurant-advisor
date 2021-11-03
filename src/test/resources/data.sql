@@ -5,10 +5,10 @@ FROM users;
 DELETE
 FROM restaurants;
 
-INSERT INTO users (id, active, email, first_name, last_name, password)
-VALUES (1, true, 'admin@gmail.com', 'Admin', 'UserLast',
+INSERT INTO users (id, activation_code, active, email, first_name, last_name, password)
+VALUES (1, null, true, 'admin@gmail.com', 'Admin', 'AdminLast',
         '{bcrypt}$2a$08$fcvC7plZPHirDqsgEplSgODGaVwXlWEJSCZFXbiNsYJqbpPHzz3n2'),
-       (2, true, 'user@yandex.ru', 'User', 'AdminLast',
+       (2, null, true, 'user@yandex.ru', 'User', 'UserLast',
         '{bcrypt}$2a$08$fcvC7plZPHirDqsgEplSgODGaVwXlWEJSCZFXbiNsYJqbpPHzz3n2');
 
 INSERT INTO user_role (role, user_id)

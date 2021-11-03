@@ -1,8 +1,12 @@
 package com.example.restaurant_advisor.controller;
 
+import com.example.restaurant_advisor.util.JsonUtil;
 import com.example.restaurant_advisor.util.TestUtil;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+import java.io.UnsupportedEncodingException;
 import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,8 +34,24 @@ public class MatcherFactory {
             assertion.accept(actual, expected);
         }
 
+        public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
+            iterableAssertion.accept(actual, expected);
+        }
+
         public ResultMatcher contentJson(T expected) {
             return result -> assertMatch(TestUtil.readFromJsonMvcResult(result, clazz), expected);
+        }
+
+        public ResultMatcher contentJson(Iterable<T> expected) {
+            return result -> assertMatch(JsonUtil.readValues(getContent(result), clazz), expected);
+        }
+
+        public T readFromJson(ResultActions action) throws UnsupportedEncodingException {
+            return JsonUtil.readValue(getContent(action.andReturn()), clazz);
+        }
+
+        private static String getContent(MvcResult result) throws UnsupportedEncodingException {
+            return result.getResponse().getContentAsString();
         }
     }
 }
