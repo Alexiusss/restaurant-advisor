@@ -1,0 +1,48 @@
+#  https://habr.com/ru/post/578744/
+
+version: '3.8'
+services:
+
+  db:
+    build:
+      context: services/db
+      dockerfile: Dockerfile.db
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ~/pg_data:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER:  postgres
+      POSTGRES_DB: restaurant_advisor
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+
+  app:
+    build:
+      context: services/app
+      dockerfile: Dockerfile.app
+    image: restaurant-advisor-app
+    environment:
+      #https://stackoverflow.com/questions/44790923/docker-compose-spring-boot-postgres-connection
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/restaurant_advisor
+    ports:
+    - "8080:8080"
+    volumes:
+    - ~/uploads:/home/ec2-user/uploads/
+    restart: always
+    depends_on:
+      - db
+
+# https://github.com/hellokoding/hellokoding-courses/blob/master/docker-examples/dockercompose-springboot-nginx/
+  nginx:
+    image: nginx:1.21.4-alpine
+    container_name: nginx
+    volumes:
+      - ~/docker/services/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    ports:
+    - "80:80"
+    - "443:443"
