@@ -22,4 +22,9 @@ VALUES (3, 'seafood', 'restaurant1', 'www.menu1.com'),
        (5, 'italian', 'cafe', 'www.menu3.com'),
        (6, 'italian', 'bar', 'www.menu4.com');
 
+INSERT INTO contacts(restaurant_id, address, email, phone_number, website)
+VALUES (3, 'restaurant1 address', 'restaurant1@email', +11111111, 'www.restaurant1.com'),
+       (5, 'cafe address', 'cafe@email', +3333333, 'www.cafe.com'),
+       (6, 'bar address', 'bar@email', +4444444, 'www.bar.com');
+
 ALTER sequence hibernate_sequence RESTART WITH 33;

@@ -16,9 +16,11 @@ import javax.validation.Valid;
 
 @RestController
 @Slf4j
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ContactController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Contact Controller")
 public class ContactController {
+
+    static final String REST_URL = "/restaurants/{id}/contact";
 
     @Autowired
     ContactRepository contactRepository;
@@ -26,14 +28,14 @@ public class ContactController {
     RestaurantRepository restaurantRepository;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping(value = "/restaurants/{id}/contact")
+    @GetMapping
     public Contact getContact(@PathVariable int id) {
         log.info("get contact by id {}", id);
         return contactRepository.getExisted(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping(value = "/restaurants/{id}/contact")
+    @PostMapping
     @CacheEvict(value = "restaurants", allEntries = true)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public String saveOrUpdateContact(@Valid Contact contact, @PathVariable int id) {
