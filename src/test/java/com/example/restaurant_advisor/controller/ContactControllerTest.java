@@ -38,7 +38,7 @@ class ContactControllerTest extends AbstractControllerTest {
 
     @Test
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL, NOT_FOUND));
+        perform(MockMvcRequestBuilders.get(REST_URL, NOT_FOUND_ID));
     }
 
     @Test
@@ -55,7 +55,7 @@ class ContactControllerTest extends AbstractControllerTest {
 
     @Test
     void save() throws Exception {
-        Contact newContact = new Contact(RESTAURANT2.getId(), "restaurant2 address", "www.restaurant2.com", "restaurant2@email", "22222222", null);
+        Contact newContact = new Contact(RESTAURANT2.getId(), "restaurant2 address", "www.restaurant2.com", "restaurant2@email", "+1(234)567-89-10", null);
 
         perform(saveContact(REST_URL, newContact))
                 .andDo(print())
@@ -65,10 +65,9 @@ class ContactControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Contact updatedContact = new Contact(RESTAURANT3.getId(), "updated address", "www.updated-restaurant2.com", "updated-restaurant2@email", "1234567", null);
+        Contact updatedContact = new Contact(RESTAURANT3.getId(), "updated address", "www.updated-restaurant2.com", "updated-restaurant2@email", "+0123(234)567-89-10", null);
 
         perform(saveContact(REST_URL, updatedContact))
-                .andDo(print())
                 .andExpect(status().isNoContent())
                 .andExpect(authenticated());
     }
@@ -78,7 +77,6 @@ class ContactControllerTest extends AbstractControllerTest {
         Contact invalidContact = new Contact(RESTAURANT2.getId(), "", "www.restaurant2.com", "restaurant2@email", "", null);
 
         perform(saveContact(REST_URL, invalidContact))
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(authenticated());
     }

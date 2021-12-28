@@ -98,3 +98,34 @@ function editContactElement(formData) {
     $("#email_" + formData.get("id")).text(formData.get("email"))
     $("#phone_number_" + formData.get("id")).text(formData.get("phone_number"))
 }
+
+// https://itchief.ru/javascript/input-mask
+$(function () {
+    $(function () {
+        function maskPhone() {
+            let country = $('#country option:selected').val();
+            switch (country) {
+                case "1" :
+                    $("#phone_number").mask("+9 (999) 999-99-99");
+                    $('#phone_number').attr('placeholder','+1 (234) 567-89-10');
+                    break;
+                case "2" :
+                    $("#phone_number").mask("+99 (999) 999-99-99");
+                    $('#phone_number').attr('placeholder','+12 (234) 567-89-10');
+                    break;
+                case "3" :
+                    $("#phone_number").mask("+999 (999) 999-99-99");
+                    $('#phone_number').attr('placeholder','+123 (234) 567-89-10');
+                    break;
+                case "4" :
+                    $("#phone_number").mask("+9999 (999) 999-99-99");
+                    $('#phone_number').attr('placeholder','+1234 (234) 567-89-10');
+                    break;
+            }
+        }
+        maskPhone();
+        $('#country').change(function () {
+            maskPhone()
+        })
+    })
+})

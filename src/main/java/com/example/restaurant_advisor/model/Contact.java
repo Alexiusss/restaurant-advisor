@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -37,6 +38,8 @@ public class Contact implements HasId {
 
     @Column(name = "phone_number", nullable = false)
     @NotBlank(message = "Please fill the phone number")
+    @Pattern(regexp = "([\\+]*[0-9]{1,4}\\s?[\\(]*\\d[0-9]{2,4}[\\)]*\\s?\\d{3}[-]*\\d{2}[-]*\\d{2})"
+            , message = "Please fill the phone number in format +1 (234) 567-89-10")
     String phone_number;
 
     // https://stackoverflow.com/a/54405532

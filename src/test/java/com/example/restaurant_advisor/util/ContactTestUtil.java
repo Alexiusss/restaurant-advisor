@@ -2,7 +2,6 @@ package com.example.restaurant_advisor.util;
 
 import com.example.restaurant_advisor.controller.MatcherFactory;
 import com.example.restaurant_advisor.model.Contact;
-import com.example.restaurant_advisor.model.User;
 import lombok.experimental.UtilityClass;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 

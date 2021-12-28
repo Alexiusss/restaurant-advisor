@@ -27,9 +27,17 @@
                                placeholder="<@spring.message "contact.email"/>">
                     </div>
                     <div class="form-group">
-                        <label for="phone_number" class="col-form-label"><@spring.message "contact.phone_number"/></label>
-                        <input type="text" class="form-control" name="phone_number" id="phone_number"
-                               placeholder="<@spring.message "contact.phone_number"/>">
+                        <label for="phone_number"
+                               class="col-form-label"><@spring.message "contact.phone_number"/></label>
+                        <select id="country" content="form-control">
+                            <option value="1">+1</option>
+                            <option value="2">+12</option>
+                            <option value="3">+123</option>
+                            <option value="4">+1234</option>
+                        </select>
+                        <input type="tel" class="form-control" name="phone_number" id="phone_number"
+                               pattern="([\+]*[0-9]{1,4}\s?[\(]*\d[0-9]{2,4}[\)]*\s?\d{3}[-]*\d{2}[-]*\d{2})"
+                               placeholder="+1 (234) 567-89-10">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
