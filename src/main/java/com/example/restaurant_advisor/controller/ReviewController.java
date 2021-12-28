@@ -16,10 +16,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Set;
@@ -30,6 +33,7 @@ import static com.example.restaurant_advisor.util.validation.ValidationUtil.chec
 @RestController
 @RequestMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@Validated
 @Tag(name = "Review Controller")
 public class ReviewController {
     @Autowired
@@ -90,8 +94,9 @@ public class ReviewController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void updateReview(
             @RequestParam(value = "id") int id,
-            @RequestParam("title") String title,
-            @RequestParam("comment") String comment,
+            // https://www.baeldung.com/spring-validate-requestparam-pathvariable
+            @RequestParam("title") @NotBlank(message = "Please fill the title") @Size(max = 255) String title,
+            @RequestParam("comment") @NotBlank(message = "Please fill the comment") @Size(max = 2048) String comment,
             @RequestParam(value = "active") boolean active
     ) {
 
