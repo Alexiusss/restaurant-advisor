@@ -27,4 +27,8 @@ VALUES (3, 'restaurant1 address', 'restaurant1@email', +11111111, 'www.restauran
        (5, 'cafe address', 'cafe@email', +3333333, 'www.cafe.com'),
        (6, 'bar address', 'bar@email', +4444444, 'www.bar.com');
 
+INSERT INTO reviews(id, comment, date, rating, title, restaurant_id, user_id, active, filename)
+VALUES (20, 'Positive review', now(), 5, 'Positive title', 3, 2, false, null),
+       (21, 'Review for deleting', now(), 2, 'Delete this', 5, 2, false, null);
+
 ALTER sequence hibernate_sequence RESTART WITH 33;

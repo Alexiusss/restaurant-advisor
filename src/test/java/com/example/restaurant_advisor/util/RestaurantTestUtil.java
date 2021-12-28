@@ -11,7 +11,7 @@ public class RestaurantTestUtil {
 
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class,"contact", "reviews");
 
-    public static final int NOT_FOUND = 100;
+    public static final int NOT_FOUND_ID = 100;
     
     public static final Restaurant RESTAURANT1 = new Restaurant(3, "restaurant1","seafood", "www.menu1.com", null);
     public static final Restaurant RESTAURANT2 = new Restaurant(4, "restaurant2","vegan", "www.menu2.com", null);

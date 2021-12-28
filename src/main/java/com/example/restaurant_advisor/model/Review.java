@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"restaurant", "user"})
+@ToString(callSuper = true, exclude = {"restaurant", "user", "likes"})
 public class Review extends BaseEntity {
 
     @Column(name = "rating", nullable = false)

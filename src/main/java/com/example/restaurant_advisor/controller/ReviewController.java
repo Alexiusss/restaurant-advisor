@@ -48,7 +48,7 @@ public class ReviewController {
     @GetMapping(value = "/reviews/{id}")
     public Review getReview(@PathVariable int id) {
         log.info("getById {}", id);
-        return reviewRepository.findById(id).orElse(null);
+        return reviewRepository.getExisted(id);
     }
 
     //  https://stackoverflow.com/a/38733234
@@ -75,24 +75,24 @@ public class ReviewController {
     @PostMapping(value = "/reviews/{id}")
     // https://stackoverflow.com/a/58317766
     @CacheEvict(value = "restaurants", allEntries = true)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
-                          @PathVariable int id,
-                          @RequestParam(value = "photo") MultipartFile photo) throws IOException {
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Review addReview(@AuthenticationPrincipal AuthUser authUser, @Valid Review review,
+                            @PathVariable int id,
+                            @RequestParam(value = "photo") MultipartFile photo) throws IOException {
         log.info("add review {} for restaurant {} from user {}", review, id, authUser.getUser());
         checkNew(review);
         review.setDate(LocalDate.now());
         review.setUser(authUser.getUser());
         review.setRestaurant(restaurantRepository.getExisted(id));
         review.setFilename(saveFile(photo, uploadPath));
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/reviews")
     @CacheEvict(value = "restaurants", allEntries = true)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void updateReview(
+    public Review updateReview(
             @RequestParam(value = "id") int id,
             // https://www.baeldung.com/spring-validate-requestparam-pathvariable
             @RequestParam("title") @NotBlank(message = "Please fill the title") @Size(max = 255) String title,
@@ -113,7 +113,7 @@ public class ReviewController {
 
         review.setActive(active);
 
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     @DeleteMapping(value = "/user-reviews/{id}")
