@@ -8,7 +8,6 @@ import com.example.restaurant_advisor.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +28,6 @@ import static com.example.restaurant_advisor.util.validation.ValidationUtil.chec
 @Controller
 @RequestMapping("user/")
 @Slf4j
-@CacheConfig(cacheNames = "users")
 public class UserController {
     private final static String CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
@@ -56,14 +54,14 @@ public class UserController {
                           @Valid User user, BindingResult bindingResult, Model model) {
 
         String url = String.format(CAPTCHA_URL, secret, captchaResponse);
-       CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
+        CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 
-       if (!response.isSuccess()){
-           model.addAttribute("captchaError", messageSource.getMessage("error.Captcha"));
-       }
+        if (!response.isSuccess()) {
+            model.addAttribute("captchaError", messageSource.getMessage("error.Captcha"));
+        }
 
         if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())) {
-            model.addAttribute("passwordError",  messageSource.getMessage("user.passwordError"));
+            model.addAttribute("passwordError", messageSource.getMessage("user.passwordError"));
         }
 
         if (bindingResult.hasErrors() || !response.isSuccess() || model.containsAttribute("passwordError")) {
@@ -75,7 +73,7 @@ public class UserController {
             return "registration";
         }
 
-            if (!userService.registerUser(user)) {
+        if (!userService.registerUser(user)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
@@ -84,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping("activate/{code}")
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = "users", allEntries = true)
     public String activate(Model model, @PathVariable String code) {
         log.info("user activation with code {}", code);
         boolean isActivated = userService.activateUser(code);
@@ -102,15 +100,16 @@ public class UserController {
 
     @GetMapping("profile")
     public String getProfile(Model model, @AuthenticationPrincipal AuthUser authUser) {
-        log.info("get profile for user {}", authUser.getUser());
-        model.addAttribute("email", authUser.getUser().getEmail());
-        model.addAttribute("firstName", authUser.getUser().getFirstName());
-        model.addAttribute("lastName", authUser.getUser().getLastName());
+        log.info("get profile for user {}", authUser.id());
+        User user = userRepository.getExisted(authUser.id());
+        model.addAttribute("email", user.getEmail());
+        model.addAttribute("firstName", user.getFirstName());
+        model.addAttribute("lastName", user.getLastName());
         return "profile";
     }
 
     @PostMapping("profile")
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = "users", allEntries = true)
     public String updateProfile(
             @AuthenticationPrincipal AuthUser authUser,
             @RequestParam String firstName,

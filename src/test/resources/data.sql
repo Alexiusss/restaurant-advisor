@@ -1,9 +1,17 @@
 DELETE
 FROM user_role;
 DELETE
+FROM user_subscriptions;
+DELETE
 FROM users;
 DELETE
 FROM restaurants;
+DELETE
+FROM contacts;
+DELETE
+FROM reviews;
+
+ALTER sequence hibernate_sequence RESTART WITH 33;
 
 INSERT INTO users (id, activation_code, active, email, first_name, last_name, password)
 VALUES (1, null, true, 'admin@gmail.com', 'Admin', 'AdminLast',
@@ -31,4 +39,5 @@ INSERT INTO reviews(id, comment, date, rating, title, restaurant_id, user_id, ac
 VALUES (20, 'Positive review', now(), 5, 'Positive title', 3, 2, false, null),
        (21, 'Review for deleting', now(), 2, 'Delete this', 5, 2, false, null);
 
-ALTER sequence hibernate_sequence RESTART WITH 33;
+INSERT INTO user_subscriptions(channel_id, subscriber_id)
+VALUES (2, 1);
