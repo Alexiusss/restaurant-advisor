@@ -74,7 +74,7 @@ public class AdminController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void activate(@PathVariable int id, @RequestParam boolean active) {

@@ -14,7 +14,7 @@ function activate(chkbox, id) {
     //  https://stackoverflow.com/a/22213543/548473
     $.ajax({
         url: userAjaxUrl + id,
-        type: "POST",
+        type: "PATCH",
         data: "active=" + active
     }).done(function () {
         chkbox.closest("tr").attr("data-user-active", active);

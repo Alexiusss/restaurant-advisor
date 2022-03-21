@@ -85,7 +85,7 @@ class AdminControllerTest extends AbstractControllerTest {
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(userRepository.getExisted(newId), newUser);
 
-        perform(MockMvcRequestBuilders.post(REST_URL + created.getId())
+        perform(MockMvcRequestBuilders.patch(REST_URL + created.getId())
                 .param("active", "true"))
                 .andExpect(authenticated())
                 .andExpect(status().isNoContent());
@@ -95,8 +95,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        User updated = USER;
-        updated.setFirstName("Updated");
+        User updated = getUpdatedUser();
 
         perform(updateUser(REST_URL, updated))
                 .andExpect(authenticated())
@@ -117,7 +116,6 @@ class AdminControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL + NOT_FOUND))
                 .andExpect(status().isUnprocessableEntity());
     }
-
 
     @Test
     void createInvalid() throws Exception {
@@ -167,7 +165,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void activateNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.post(REST_URL + NOT_FOUND)
+        perform(MockMvcRequestBuilders.patch(REST_URL + NOT_FOUND)
                 .param("active", "true"))
                 .andExpect(status().isUnprocessableEntity());
     }
