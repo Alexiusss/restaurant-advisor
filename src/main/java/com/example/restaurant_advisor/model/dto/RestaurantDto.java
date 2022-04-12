@@ -1,6 +1,5 @@
 package com.example.restaurant_advisor.model.dto;
 
-import com.example.restaurant_advisor.model.Restaurant;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 

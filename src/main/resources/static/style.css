@@ -1,11 +1,4 @@
-/*body {*/
-/*    color: #113;*/
-/*}*/
-
 body {
-    /*background-image: linear-gradient(#4A148C, #E53935);*/
-    /*background-image: linear-gradient(90deg, #b9deed, #efefef);*/
-    /*background-image: linear-gradient(90deg, #cfecd0, #a0cea7, #9ec0db);*/
     background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     background-repeat: no-repeat;
     color: #000;
